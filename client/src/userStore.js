@@ -1,0 +1,43 @@
+// userStore.js
+import { reactive } from 'vue';
+
+export const userStore = reactive({
+  userId: null,
+  username: null,
+  role: null,
+  isLoggedIn: false,
+
+  // Méthode pour initialiser depuis le token
+  initFromToken() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        this.userId = payload.id;
+        this.username = payload.username;
+        this.role = payload.role;
+        this.isLoggedIn = true;
+      } catch {
+        this.logout();
+      }
+    }
+  },
+
+  // Méthode pour se connecter
+  login(data) {
+    localStorage.setItem('token', data.token);
+    this.userId = data.userId;
+    this.username = data.username;
+    this.role = data.role;
+    this.isLoggedIn = true;
+  },
+
+  // Méthode pour se déconnecter
+  logout() {
+    localStorage.removeItem('token');
+    this.userId = null;
+    this.username = null;
+    this.role = null;
+    this.isLoggedIn = false;
+  }
+});
