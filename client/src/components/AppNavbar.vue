@@ -16,7 +16,7 @@
           class="nav-link admin-link"
           exact-active-class="active"
         >
-          Administration
+          {{ $t('nav.adminusers') }}
         </router-link>
 
         <router-link 
@@ -25,10 +25,18 @@
           class="nav-link admin-link"
           exact-active-class="active"
         >
-          Albums
+          {{ $t('nav.adminalbums') }}
         </router-link>
 
         <router-link to="/blindtest" class="nav-link">🎵 Blind Test</router-link>
+      </div>
+
+      <!-- Language switcher -->
+      <div class="language-switcher">
+        <button @click="toggleLanguage" class="lang-btn">
+          <img :src="currentFlag" :alt="$i18n.locale" class="lang-btn-flagimg" />
+            <p class="lang-btn-txt">{{ this.$i18n.locale.toUpperCase() }}</p>
+        </button>
       </div>
     </div>
   </nav>
@@ -38,8 +46,18 @@
 import api from '../api';
 import { userStore } from '../userStore';
 
+import ukFlag from '@/assets/flag_uk.png';
+import frFlag from '@/assets/flag_france.png';
+
 export default {
   name: 'AppNavbar',
+
+  data() {
+    return {
+      ukFlag,
+      frFlag
+    }
+  },
 
   computed: {
     user() {
@@ -58,6 +76,9 @@ export default {
     isLoggedIn() {
       return userStore.isLoggedIn;
     },
+    currentFlag() {
+      return this.$i18n.locale === 'en' ? this.ukFlag : this.frFlag;
+    }
   },
 
   methods: {
@@ -68,6 +89,11 @@ export default {
       userStore.role = null;
       userStore.isLoggedIn = false;
       this.$router.push('/');
+    },
+    toggleLanguage() {
+      const newLocale = this.$i18n.locale === 'en' ? 'fr' : 'en';
+      this.$i18n.locale = newLocale;
+      localStorage.setItem('locale', newLocale);
     }
   }
 };
@@ -158,6 +184,37 @@ export default {
 .admin-link.active {
   color: #fff;
   background: #d35400;
+}
+
+/* Language switcher */
+.language-switcher {
+  margin-left: auto;
+  margin-right: 70px;
+}
+
+.lang-btn {
+  padding: 0.5rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.lang-btn:hover {
+  opacity: 1;
+}
+
+.lang-btn-flagimg {
+  width: 30px;
+  height: 20px;
+  object-fit: cover;
+  background: none !important;
+  display: inline-block;
+}
+
+.lang-btn-txt {
+  color: rgb(211, 211, 211);
 }
 
 /* ═══════════════════════════════════════════════════════════

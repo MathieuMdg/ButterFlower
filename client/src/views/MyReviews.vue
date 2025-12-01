@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h2>Reviews by {{ user.username }}</h2>
+    <h2>{{ $t('profile.reviewsBy') }} {{ user.username }}</h2>
 
     <ul>
       <li v-for="rev in reviews" :key="rev.id">
         <strong>{{ rev.title }} – {{ rev.artist }}</strong>
         <br>
-        Rating: {{ rev.rating }} étoile(s)
+        {{ $t('common.rating') }} : {{ rev.rating }} {{ $t('profile.stars') }}
         <br>
         {{ rev.review_text }}
         <br><br>

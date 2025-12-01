@@ -4,7 +4,8 @@
   </div>
   <div v-if="album" class="album-details-letterboxd">
     <button class="back-btn" @click="goBack">
-      <span class="arrow">&#8592;</span> Retour aux albums
+      <span class="arrow">&#8592;</span> 
+      {{ $t('albumDetails.backButton') }}
     </button>
     <div class="details-grid">
       
@@ -20,7 +21,7 @@
 
         <!-- Liste des chansons sous la cover -->
         <div class="album-chansons" v-if="chansons.length">
-          <h3 class="chansons-title">Titres de l'album</h3>
+          <h3 class="chansons-title">{{ $t('albumDetails.tracklistTitle') }}</h3>
           
           <div class="chanson-row" v-for="(chanson, index) in chansons" :key="chanson.id">
             <!-- Bouton Play/Pause -->
@@ -28,7 +29,7 @@
               class="play-btn" 
               @click="togglePlay(index)"
               :disabled="!chanson.url_audio"
-              :title="!chanson.url_audio ? 'Audio non disponible' : (currentPlaying === index ? 'Pause' : 'Écouter')"
+              :title="!chanson.url_audio ? this.$t('albumDetails.audioNotAvailable') : (currentPlaying === index ? this.$t('albumDetails.pause') : this.$t('albumDetails.play'))"
             >
               <span v-if="currentPlaying === index && isPlaying">⏸</span>
               <span v-else>▶</span>
@@ -59,7 +60,7 @@
           <!-- Barre de progression -->
           <div class="audio-progress-bar" v-if="currentPlaying !== null">
             <div class="now-playing">
-              <span class="now-playing-label">En cours :</span>
+              <span class="now-playing-label">{{ $t('albumDetails.nowPlayingLabel') }}</span>
               <span class="now-playing-title">{{ chansons[currentPlaying]?.titre }}</span>
             </div>
             <div class="progress-container" @click="seekAudio">
@@ -73,35 +74,35 @@
         </div>
 
         <div v-else class="no-chansons">
-          <em>Aucune chanson trouvée</em>
+          <em>{{ $t('albumDetails.noTracksFound') }}</em>
         </div>
       </div>
 
       <!-- À droite : reviews + form -->
       <div class="right-side">
         <div v-if="userToken" class="review-form-box">
-          <h4 class="form-title">Ajouter une review</h4>
+          <h4 class="form-title">{{ $t('albumDetails.addReviewBox.title') }}</h4>
           <form @submit.prevent="addReview" class="flex-form">
             <div class="row">
-              <span class="input-label">Note :</span> 
+              <span class="input-label">{{ $t('albumDetails.addReviewBox.ratingLabel') }}</span> 
               <StarRating v-model="newReview.rating" />
             </div>
             <div class="row">
-              <span class="input-label">Commentaire :</span>
+              <span class="input-label">{{ $t('albumDetails.addReviewBox.commentLabel') }}</span>
               <textarea v-model="newReview.review_text"
                 :disabled="!canComment"
                 class="fixed-textarea"
                 placeholder="Commentaire"></textarea>
               <div v-if="!canComment" class="comment-blocked-info">
-                Vous avez été temporairement bloqué. Vous pouvez toujours noter l'album mais pas commenter.
+                {{ $t('albumDetails.addReviewBox.blockedInfo') }}
               </div>
             </div>
-            <button type="submit" class="submit-btn">Envoyer</button>
+            <button type="submit" class="submit-btn">{{ $t('albumDetails.addReviewBox.sendButton') }}</button>
           </form>
           <div v-if="err" class="err-txt">{{ err }}</div>
         </div>
         
-        <h3 class="reviews-h3">Reviews</h3>
+        <h3 class="reviews-h3">{{ $t('albumDetails.reviews.title') }}</h3>
         <div class="reviews-list">
           <div
             v-for="review in reviews"
@@ -112,9 +113,9 @@
               class="review-username"
               :class="{ clickable: isAdmin }"
               @click="isAdmin && toggleUserHistory(review.user_id, review.username, $event)"
-              :title="isAdmin ? 'Voir historique utilisateur' : ''"
+              :title="isAdmin ? this.$t('albumDetails.userHistory.historyOf') : ''"
             >
-              {{ review.username || 'Utilisateur inconnu' }}
+              {{ review.username || this.$t('albumDetails.reviews.unknownUser') }}
 
               <div
                 v-if="showUserHistory && popupUserId === review.user_id"
@@ -122,14 +123,14 @@
                 :style="popupPosition"
               >
                 <div class="user-history-header-popup">
-                  <span>Historique de {{ userHistoryName }}</span>
+                  <span>{{ $t('albumDetails.userHistory.historyOf') }} {{ userHistoryName }}</span>
                   <button @click.stop="closeUserHistory" class="popup-close-btn">✕</button>
                 </div>
                 <div v-if="userHistory.length">
                   <div v-for="r in userHistory" :key="r.id" class="profile-history-item">
                     <div><strong>{{ r.title }}</strong> <span class="profile-history-artist">({{ r.artist }})</span></div>
                     <div>
-                      <span>Note : <span class="profile-history-note">{{ r.rating }} étoile(s)</span></span>
+                      <span>{{ $t('albumDetails.addReviewBox.ratingLabel') }} <span class="profile-history-note">{{ r.rating }} {{ $t('profile.stars') }}</span></span>
                     </div>
                     <div v-if="r.review_text && r.review_text.trim() !== ''">
                       <span class="profile-history-comment">«{{ r.review_text }}»</span>
@@ -138,12 +139,12 @@
                       v-if="isAdmin"
                       class="admin-delete-review"
                       @click.stop="adminDeleteReview(r.id)"
-                      title="Supprimer cette review"
-                    >Supprimer</button>
+                      title="{{this.$t('albumDetails.reviews.adminDeleteTitle')}}"
+                    >{{ $t('albumDetails.reviews.adminDeleteTitle') }}</button>
                   </div>
                 </div>
                 <div v-else>
-                  <em>Aucun avis posté.</em>
+                  <em>{{ $t('albumDetails.userHistory.noReviews') }}</em>
                 </div>
               </div>
             </div>
@@ -154,25 +155,25 @@
               <em>{{ review.review_text }}</em>
             </div>
             <div v-if="isMyReview(review)" class="review-actions">
-              <button class="review-edit-btn" @click="editReviewMode(review)">Modifier</button>
+              <button class="review-edit-btn" @click="editReviewMode(review)">{{ $t('albumDetails.reviews.edit') }}</button>
             </div>
             <hr class="review-separator" />
           </div>
 
           <!-- Formulaire d'édition -->
           <div v-if="editMode" class="edit-review-modal">
-            <h4>Modifier votre review</h4>
+            <h4>{{ $t('albumDetails.reviews.edit') }}</h4>
             <form @submit.prevent="submitEditReview" class="flex-form">
               <div class="row">
-                <span>Note :</span>
+                <span>{{ $t('albumDetails.addReviewBox.ratingLabel') }}</span>
                 <StarRating v-model="editReviewData.rating" />
               </div>
               <div class="row">
-                <span>Commentaire :</span>
+                <span>{{ $t('albumDetails.addReviewBox.commentPlaceholder') }}</span>
                 <textarea v-model="editReviewData.review_text" class="fixed-textarea"></textarea>
               </div>
-              <button type="submit" class="submit-btn">Valider</button>
-              <button type="button" @click="cancelEditReview" class="cancel-btn">Annuler</button>
+              <button type="submit" class="submit-btn">{{ $t('albumDetails.reviews.validate') }}</button>
+              <button type="button" @click="cancelEditReview" class="cancel-btn">{{ $t('albumDetails.reviews.cancel') }}</button>
             </form>
           </div>
         </div>
@@ -181,7 +182,7 @@
   </div>
 
   <div v-else class="loading">
-    Chargement de l'album...
+    {{ $t('ui.loadingAlbum') }}
   </div>
 </template>
 
@@ -258,7 +259,7 @@ export default {
   methods: {
     async noteChanson(chansonId, note) {
       if (!this.userToken) {
-        this.err = "Connectez-vous pour noter.";
+        this.err = this.$t('albumDetails.addReviewBox.errNotLogged');
         return;
       }
       try {
@@ -271,7 +272,7 @@ export default {
           this.chansons[idx].my_note = note;
         }
       } catch {
-        this.err = "Erreur lors de la notation.";
+        this.err = this.$t('albumDetails.addReviewBox.errRating');
       }
     },
 
@@ -285,7 +286,7 @@ export default {
       }, {
         headers: { Authorization: 'Bearer ' + this.userToken }
       }).then(() => {
-        this.successMsg = "Avis posté avec succès !";
+        this.successMsg = this.$t('albumDetails.addReviewBox.successPosted');
         setTimeout(() => { this.successMsg = ""; }, 3000);
         return api.get(`/reviews/album/${id}`);
       }).then(res => {
@@ -293,7 +294,7 @@ export default {
         this.newReview = { rating: 5, review_text: '' };
         this.err = '';
       }).catch(() => {
-        this.err = "Erreur lors de l'ajout de la review";
+        this.err = this.$t('albumDetails.addReviewBox.addError');
         this.successMsg = "";
       });
     },
@@ -331,12 +332,12 @@ export default {
         const id = this.$route.params.id;
         const res = await api.get(`/reviews/album/${id}`);
         this.reviews = res.data;
-        this.successMsg = "Votre review a été modifiée !";
+        this.successMsg = this.$t('albumDetails.reviews.yourReviewUpdated');
         setTimeout(() => { this.successMsg = ""; }, 2500);
         this.editMode = false;
         this.editReviewData = null;
       } catch {
-        this.err = "La modification a échoué";
+        this.err = this.$t('albumDetails.reviews.updateFailed');
       }
     },
     cancelEditReview() {

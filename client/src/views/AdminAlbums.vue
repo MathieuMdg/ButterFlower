@@ -1,11 +1,11 @@
 <template>
   <div v-if="isAdmin" class="admin-page">
     <div class="admin-container">
-      <h2 class="admin-title">Gestion des albums</h2>
+      <h2 class="admin-title"> {{ $t('admin.albums.pageTitle') }}</h2>
 
       <!-- Bouton Ajouter -->
       <button class="add-album-btn" @click="openAddModal">
-        <span>+</span> Ajouter un album
+        <span>+</span> {{ $t('admin.albums.addAlbumButton') }}
       </button>
 
       <!-- Liste des albums -->
@@ -13,12 +13,12 @@
         <table class="admin-table">
           <thead>
             <tr>
-              <th>Cover</th>
-              <th>Titre</th>
-              <th>Artiste</th>
-              <th>Année</th>
-              <th>Genre</th>
-              <th>Actions</th>
+              <th>{{ $t('admin.albums.table.cover') }}</th>
+              <th>{{ $t('admin.albums.table.title') }}</th>
+              <th>{{ $t('admin.albums.table.artist') }}</th>
+              <th>{{ $t('admin.albums.table.year') }}</th>
+              <th>{{ $t('admin.albums.table.genre') }}</th>
+              <th>{{ $t('admin.albums.table.actions') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -35,10 +35,10 @@
               </td>
               <td class="actions-cell">
                 <button class="action-btn edit-btn" @click="openEditModal(album)">
-                  Modifier
+                  {{ $t('admin.albums.modal.actions.edit') }}
                 </button>
                 <button class="action-btn delete-btn" @click="confirmDelete(album)">
-                  Supprimer
+                  {{ $t('admin.albums.deleteConfirm.confirmDelete') }}
                 </button>
               </td>
             </tr>
@@ -50,48 +50,79 @@
       <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
         <div class="modal-content">
           <div class="modal-header">
-            <h3>{{ isEditing ? 'Modifier l\'album' : 'Ajouter un album' }}</h3>
+            <h3>
+              {{ isEditing ? $t('admin.albums.modal.editTitle')
+                          : $t('admin.albums.modal.addTitle') }}
+            </h3>
             <button class="modal-close" @click="closeModal">✕</button>
           </div>
           
           <form @submit.prevent="submitForm" class="album-form">
             <div class="form-group">
-              <label>Titre *</label>
-              <input v-model="formData.title" type="text" required placeholder="Titre de l'album" />
+              <label>{{ $t('admin.albums.modal.labels.title') }}</label>
+              <input
+                v-model="formData.title"
+                type="text"
+                required
+                :placeholder="$t('admin.albums.modal.placeholders.title')"
+              />
             </div>
             
             <div class="form-group">
-              <label>Artiste *</label>
-              <input v-model="formData.artist" type="text" required placeholder="Nom de l'artiste" />
+              <label>{{ $t('admin.albums.modal.labels.artist') }}</label>
+              <input
+                v-model="formData.artist"
+                type="text"
+                required
+                :placeholder="$t('admin.albums.modal.placeholders.artist')"
+              />
             </div>
             
             <div class="form-row">
               <div class="form-group">
-                <label>Année de sortie</label>
-                <input v-model="formData.release_year" type="number" placeholder="2024" min="1900" max="2100" />
+                <label>{{ $t('admin.albums.modal.labels.releaseYear') }}</label>
+                <input
+                  v-model="formData.release_year"
+                  type="number"
+                  :placeholder="$t('admin.albums.modal.placeholders.year')"
+                  min="1900"
+                  max="2100"
+                />
               </div>
               
               <div class="form-group">
-                <label>Genre</label>
-                <input v-model="formData.genre" type="text" placeholder="Pop, Rock, etc." />
+                <label>{{ $t('admin.albums.modal.labels.genre') }}</label>
+                <input
+                  v-model="formData.genre"
+                  type="text"
+                  placeholder="Pop, Rock, etc."
+                />
               </div>
             </div>
             
             <div class="form-group">
-              <label>URL de la cover</label>
-              <input v-model="formData.cover_url" type="url" placeholder="https://..." />
+              <label>{{ $t('admin.albums.modal.labels.coverUrl') }}</label>
+              <input
+                v-model="formData.cover_url"
+                type="url"
+                :placeholder="$t('admin.albums.modal.placeholders.coverUrl')"
+              />
             </div>
             
             <!-- Prévisualisation de la cover -->
             <div v-if="formData.cover_url" class="cover-preview">
-              <label>Aperçu :</label>
+              <label>{{ $t('admin.albums.modal.labels.previewLabel') }}</label>
               <img :src="formData.cover_url" alt="Preview" @error="onCoverError" />
             </div>
             
             <div class="form-actions">
-              <button type="button" class="cancel-btn" @click="closeModal">Annuler</button>
+              <button type="button" class="cancel-btn" @click="closeModal">
+                {{ $t('admin.albums.modal.actions.cancel') }}
+              </button>
               <button type="submit" class="submit-btn">
-                {{ isEditing ? 'Enregistrer' : 'Ajouter' }}
+                {{ isEditing
+                    ? $t('admin.albums.modal.actions.save')
+                    : $t('admin.albums.modal.actions.add') }}
               </button>
             </div>
           </form>
@@ -102,14 +133,19 @@
       <div v-if="showDeleteConfirm" class="modal-overlay" @click.self="closeDeleteConfirm">
         <div class="modal-content delete-confirm">
           <div class="delete-icon">⚠️</div>
-          <h3>Supprimer cet album ?</h3>
+          <h3>{{ $t('admin.albums.deleteConfirm.title') }}</h3>
           <p>
-            Êtes-vous sûr de vouloir supprimer <strong>{{ albumToDelete?.title }}</strong> ?
-            <br><span class="warning-text">Cette action supprimera également toutes les reviews et chansons associées.</span>
+            {{ $t('admin.albums.deleteConfirm.messagePrefix') }}
+            <strong>{{ albumToDelete?.title }}</strong> ?
+            <br><span class="warning-text">{{ $t('admin.albums.deleteConfirm.warningText') }}</span>
           </p>
           <div class="form-actions">
-            <button class="cancel-btn" @click="closeDeleteConfirm">Annuler</button>
-            <button class="delete-confirm-btn" @click="deleteAlbum">Supprimer</button>
+            <button class="cancel-btn" @click="closeDeleteConfirm">
+              {{ $t('admin.albums.deleteConfirm.cancel') }}
+            </button>
+            <button class="delete-confirm-btn" @click="deleteAlbum">
+              {{ $t('admin.albums.deleteConfirm.confirmDelete') }}
+            </button>
           </div>
         </div>
       </div>
@@ -124,8 +160,8 @@
   <div v-else class="access-denied">
     <div class="denied-content">
       <span class="denied-icon">🔒</span>
-      <h2>Accès refusé</h2>
-      <p>Vous n'avez pas les permissions nécessaires pour accéder à cette page.</p>
+      <h2>{{ $t('admin.albums.accessDenied.title') }}</h2>
+      <p>{{ $t('admin.albums.accessDenied.message') }}</p>
     </div>
   </div>
 </template>
@@ -176,7 +212,7 @@ export default {
         const res = await api.get('/albums');
         this.albums = res.data;
       } catch {
-        this.showNotification('Erreur lors du chargement des albums', 'error');
+        this.showNotification(this.$t('admin.albums.notifications.loadError'), 'error');
       }
     },
 
@@ -218,16 +254,19 @@ export default {
         
         if (this.isEditing) {
           await api.put(`/albums/${this.editingId}`, this.formData, { headers });
-          this.showNotification('Album modifié avec succès', 'success');
+          this.showNotification(this.$t('admin.albums.notifications.albumUpdated'), 'success');
         } else {
           await api.post('/albums', this.formData, { headers });
-          this.showNotification('Album ajouté avec succès', 'success');
+          this.showNotification(this.$t('admin.albums.notifications.albumAdded'), 'success');
         }
         
         this.closeModal();
         this.loadAlbums();
       } catch (err) {
-        this.showNotification(err.response?.data || 'Erreur lors de l\'opération', 'error');
+        this.showNotification(
+          err.response?.data || this.$t('admin.albums.notifications.operationError'),
+          'error'
+        );
       }
     },
 
@@ -245,11 +284,14 @@ export default {
       try {
         const headers = { Authorization: 'Bearer ' + this.userToken };
         await api.delete(`/albums/${this.albumToDelete.id}`, { headers });
-        this.showNotification('Album supprimé avec succès', 'success');
+        this.showNotification(this.$t('admin.albums.notifications.albumDeleted'), 'success');
         this.closeDeleteConfirm();
         this.loadAlbums();
       } catch (err) {
-        this.showNotification(err.response?.data || 'Erreur lors de la suppression', 'error');
+        this.showNotification(
+          err.response?.data || this.$t('admin.albums.notifications.deleteError'),
+          'error'
+        );
       }
     },
 

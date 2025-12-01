@@ -3,43 +3,49 @@
     <div class="auth-container">
       <div class="auth-header">
         <span class="auth-icon">🎵</span>
-        <h1>Connexion</h1>
-        <p class="auth-subtitle">Accédez à votre compte ButterFlower</p>
+        <h1>{{ $t('auth.loginTitle') }}</h1>
+        <p class="auth-subtitle">{{ $t('auth.loginSubtitle') }}</p>
       </div>
 
       <form @submit.prevent="handleLogin" class="auth-form">
         <div class="form-group">
-          <label for="email">Email</label>
+          <label for="email">{{ $t('auth.emailLabel') }}</label>
           <input 
             id="email"
             v-model="email" 
             type="email" 
             required 
-            placeholder="votre@email.com"
+            :placeholder="$t('auth.emailPlaceholder')"
             autocomplete="email"
           />
         </div>
 
         <div class="form-group">
-          <label for="password">Mot de passe</label>
+          <label for="password">{{ $t('auth.passwordLabel') }}</label>
           <input 
             id="password"
             v-model="password" 
             type="password" 
             required 
-            placeholder="Votre mot de passe"
+            :placeholder="$t('auth.passwordPlaceholder')"
             autocomplete="current-password"
           />
         </div>
 
-        <button type="submit" class="submit-btn">Se connecter</button>
+        <button type="submit" class="submit-btn">
+          {{ $t('auth.loginButton') }}
+        </button>
 
         <div v-if="errorMsg" class="message error">{{ errorMsg }}</div>
       </form>
 
       <div class="auth-footer">
-        <p>Pas encore de compte ? <router-link to="/register" class="auth-link">S'inscrire</router-link></p>
+        <p>
+          {{ $t('auth.noAccountPrompt') }}
+          <router-link to="/register" class="auth-link">{{ $t('auth.registerLink') }}</router-link>
+        </p>
       </div>
+      
     </div>
   </div>
 </template>
@@ -67,12 +73,10 @@ export default {
           password: this.password
         }, { withCredentials: true });
         
-        // Utiliser la méthode du store
         userStore.login(res.data);
-
-         window.location.href = '/';
+        window.location.href = '/';
       } catch (err) {
-        this.errorMsg = "Email ou mot de passe incorrect";
+        this.errorMsg = this.$t('auth.loginError');
       }
     }
   }

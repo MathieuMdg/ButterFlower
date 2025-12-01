@@ -1,0 +1,278 @@
+{
+  "nav": {
+    "home": "Home",
+    "albums": "Albums",
+    "blindtest": "Test",
+    "myreviews": "My Reviews",
+    "adminalbums": "Admin Albums",
+    "adminusers": "Admin Users",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout"
+  },
+  "common": {
+    "title": "Title",
+    "artist": "Artist",
+    "rating": "Rating",
+    "review": "Review",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit"
+  },
+  "language": "Language",
+
+  "auth": {
+    "loginTitle": "Login",
+    "loginSubtitle": "Sign in to your ButterFlower account",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "emailPlaceholder": "your@email.com",
+    "passwordPlaceholder": "Your password",
+    "loginButton": "Log in",
+    "loginError": "Incorrect email or password",
+    "noAccountPrompt": "Don't have an account yet?",
+    "registerLink": "Register",
+
+    "registerTitle": "Create an account",
+    "registerSubtitle": "Join ButterFlower to rate your favorite albums",
+    "usernameLabel": "Username",
+    "usernamePlaceholder": "Your username",
+    "passwordMinPlaceholder": "Minimum 6 characters",
+    "registerButton": "Sign up",
+    "registerSuccess": "Account created! Log in to continue.",
+    "registerError": "Registration failed",
+    "alreadyAccountPrompt": "Already have an account?",
+    "signinLink": "Log in"
+  },
+
+  "profile": {
+    "history": "History",
+    "logout": "Logout",
+    "login": "Log in",
+    "historyHeader": "Your rating history",
+    "ratingLabelShort": "Your rating:",
+    "stars": "star(s)",
+    "reviewsBy": "Reviews by",
+    "noReviews": "No reviews posted.",
+    "delete": "Delete",
+    "edit": "Edit",
+    "anonymous": "Anonymous",
+    "user": "User",
+    "profileAlt": "Profile",
+    "noRating": "No rating",
+    "deleteConfirmError": "Error while deleting."
+  },
+
+  "albums": {
+    "recommendedForYou": "Recommended for you",
+    "topRated": "Top rated",
+    "recentReleases": "Recent releases",
+    "songsToDiscover": "Songs to discover",
+    "yourFavoriteAlbums": "Your favorite albums",
+    "allAlbums": "All albums",
+    "noRecommendations": "No recommendations",
+    "noTopRated": "No rated albums",
+    "noRecentAlbums": "No recent albums",
+    "noSongsAvailable": "No songs available",
+    "noData": "No data",
+    "backToAlbums": "Back to albums",
+    "seeAlbum": "View album",
+    "trackAlbum": "Album:"
+  },
+
+  "blindtest": {
+    "title": "🎵 Blind Test",
+    "description": "Test your music knowledge!\n10 questions • max 3 points per question",
+    "rules": {
+      "songTitle": "Song title",
+      "artistName": "Artist name",
+      "albumName": "Album name"
+    },
+    "start": {
+      "startButton": "Start game",
+      "loading": "Loading..."
+    },
+    "audioExcerpt": "Audio excerpt",
+    "lyricsExcerpt": "Lyrics excerpt",
+    "placeholders": {
+      "enterTitle": "Enter the title...",
+      "enterArtist": "Enter the artist...",
+      "enterAlbum": "Enter the album..."
+    },
+    "validateAnswer": "Submit answer",
+    "result": {
+      "perfect": "🎉 Perfect!",
+      "wellPlayed": "👍 Well done!",
+      "missed": "😅 Missed!",
+      "pointsPrefix": "+",
+      "point": "point",
+      "pointsPlural": "points",
+      "empty": "(empty)",
+      "songLabel": "Song:",
+      "artistLabel": "Artist:",
+      "albumLabel": "Album:",
+      "nextQuestion": "Next question →",
+      "seeResults": "See my results"
+    },
+    "end": {
+      "gameFinished": "🏆 Game finished!",
+      "finalScoreOf": "/ 30",
+      "perfectAnswers": "Perfect answers",
+      "partialAnswers": "Partial answers",
+      "wrongAnswers": "Wrong answers",
+      "playAgain": "🔄 Play again",
+      "backToAlbums": "Back to albums"
+    },
+    "scoreMessages": {
+      "incredible": "🎸 Incredible! You're a true music lover!",
+      "excellent": "🎵 Excellent! You know your music well!",
+      "notBad": "🎶 Not bad! Keep exploring!",
+      "canDoBetter": "🎤 You can do better, listen to the albums again!",
+      "discoverMore": "📻 Time to discover new music!"
+    },
+    "audio": {
+      "play": "Play",
+      "pause": "Pause",
+      "timeMax": "0:30"
+    },
+    "errors": {
+      "loadError": "Error while loading the blind test",
+      "alertLoadError": "Error loading the blind test"
+    }
+  },
+
+  "albumDetails": {
+    "backButton": "Back to albums",
+    "tracklistTitle": "Tracklist",
+    "audioNotAvailable": "Audio not available",
+    "play": "Play",
+    "pause": "Pause",
+    "noTracksFound": "No songs found",
+    "nowPlayingLabel": "Now playing:",
+    "addReviewBox": {
+      "title": "Add a review",
+      "ratingLabel": "Rating:",
+      "commentLabel": "Comment:",
+      "commentPlaceholder": "Comment",
+      "sendButton": "Submit",
+      "blockedInfo": "You have been temporarily blocked. You can still rate the album but not comment.",
+      "successPosted": "Review posted successfully!",
+      "addError": "Error adding the review",
+      "errNotLogged": "Log in to rate.",
+      "errRating": "Error while rating.",
+      "successTimeoutMs": 3000
+    },
+    "reviews": {
+      "title": "Reviews",
+      "unknownUser": "Unknown user",
+      "adminDeleteTitle": "Delete this review",
+      "yourReviewUpdated": "Your review has been updated!",
+      "updateFailed": "Update failed",
+      "validate": "Save",
+      "cancel": "Cancel",
+      "edit": "Edit"
+    },
+    "userHistory": {
+      "historyOf": "History of",
+      "noReviews": "No reviews posted."
+    },
+    "errors": {
+      "generalAddReview": "Error adding the review",
+      "generalUpdateReview": "Error updating the review"
+    }
+  },
+
+  "admin": {
+    "users": {
+      "pageTitle": "User management",
+      "table": {
+        "id": "ID",
+        "username": "Username",
+        "email": "Email",
+        "role": "Role",
+        "comments": "Comments",
+        "actions": "Actions",
+        "allowed": "Allowed",
+        "blocked": "Blocked",
+        "block": "Block",
+        "unblock": "Unblock"
+      },
+      "userHistory": {
+        "historyOf": "History of",
+        "noHistory": "No reviews posted.",
+        "delete": "Delete",
+        "ratingLabel": "Rating:"
+      },
+      "accessDenied": {
+        "title": "Access denied",
+        "message": "You do not have the necessary permissions to access this page."
+      }
+    },
+    "albums": {
+      "pageTitle": "Album management",
+      "addAlbumButton": "Add an album",
+      "table": {
+        "cover": "Cover",
+        "title": "Title",
+        "artist": "Artist",
+        "year": "Year",
+        "genre": "Genre",
+        "actions": "Actions",
+        "noGenre": "-"
+      },
+      "modal": {
+        "addTitle": "Add an album",
+        "editTitle": "Edit album",
+        "labels": {
+          "title": "Title *",
+          "artist": "Artist *",
+          "releaseYear": "Release year",
+          "genre": "Genre",
+          "coverUrl": "Cover URL",
+          "previewLabel": "Preview:"
+        },
+        "placeholders": {
+          "title": "Album title",
+          "artist": "Artist name",
+          "year": "2024",
+          "coverUrl": "https://..."
+        },
+        "actions": {
+          "cancel": "Cancel",
+          "add": "Add",
+          "edit": "Edit"
+        },
+        "coverErrorPlaceholder": "https://via.placeholder.com/100x100?text=Error"
+      },
+      "deleteConfirm": {
+        "title": "Delete this album?",
+        "messagePrefix": "Are you sure you want to delete",
+        "messageSuffix": "This action will also delete all reviews and tracks associated.",
+        "warningText": "This will also delete all reviews and tracks associated.",
+        "cancel": "Cancel",
+        "confirmDelete": "Delete"
+      },
+      "notifications": {
+        "albumUpdated": "Album updated successfully",
+        "albumAdded": "Album added successfully",
+        "albumDeleted": "Album deleted successfully",
+        "loadError": "Error loading albums",
+        "operationError": "Error during operation",
+        "deleteError": "Error deleting"
+      },
+      "accessDenied": {
+        "title": "Access denied",
+        "message": "You do not have the necessary permissions to access this page."
+      }
+    }
+  },
+
+  "ui": {
+    "loadingAlbum": "Loading album...",
+    "noDataItalic": "No data",
+    "confirm": "Confirm",
+    "close": "Close",
+    "search": "Search"
+  }
+}

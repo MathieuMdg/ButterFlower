@@ -15,22 +15,22 @@
             v-if="isLoggedIn"
             class="profile-menu-history"
             @click="openHistory"
-          >Historique</button>
+          >{{ $t('profile.history') }}</button>
           <button
             v-if="isLoggedIn"
             class="profile-menu-logout"
             @click="handleLogout"
-          >Déconnexion</button>
+          >{{ $t('profile.logout') }}</button>
           <button
             v-else
             class="profile-menu-login"
             @click="redirectToLogin"
-          >Se connecter</button>
+          >{{ $t('profile.login') }}</button>
         </div>
         <!-- Fenêtre historique flottante -->
         <div v-if="historyOpen" class="profile-history-modal">
           <div class="profile-history-header">
-            <span>Historique de vos notes</span>
+            <span>{{ $t('profile.historyHeader') }}</span>
             <button @click="closeHistory" class="modal-close-btn">✕</button>
           </div>
           <div v-if="userReviews.length">
@@ -39,23 +39,23 @@
                 <strong>{{ r.title }}</strong> <span class="profile-history-artist">({{ r.artist }})</span>
               </div>
               <div>
-                <span>Note : <span class="profile-history-note">{{ r.rating }} étoile(s)</span></span>
+                <span>{{ $t('profile.ratingLabelShort') }} <span class="profile-history-note"> {{ r.rating }} {{ $t('profile.stars') }}</span></span>
               </div>
               <div v-if="r.review_text && r.review_text.trim() !== ''">
                 <span class="profile-history-comment">«{{ r.review_text }}»</span>
               </div>
               <div class="profile-history-actions">
                 <button class="profile-history-btn profile-history-delete" @click="deleteReview(r.id)">
-                  Supprimer
+                  {{ $t('common.delete') }}
                 </button>
                 <button class="profile-history-btn profile-history-edit" @click="editReview(r.album_id)">
-                  Modifier
+                  {{ $t('common.edit') }}
                 </button>
               </div>
             </div>
           </div>
           <div v-else>
-            <em>Aucun avis posté.</em>
+            <em>{{ $t('profile.noReviews') }}</em>
           </div>
         </div>
       </div>
@@ -63,7 +63,7 @@
 
     <!-- Ligne 1 : Recommandés pour vous -->
     <section class="album-row">
-      <h2 class="row-title">Recommandés pour vous</h2>
+      <h2 class="row-title">{{ $t('albums.recommendedForYou') }}</h2>
       <div class="albums-scroll">
         <div 
           v-for="album in recommendedAlbums" 
@@ -75,13 +75,13 @@
           <h3>{{ album.title }}</h3>
           <p>{{ album.artist }}</p>
         </div>
-        <div v-if="!recommendedAlbums.length" class="no-data">Aucune recommandation</div>
+        <div v-if="!recommendedAlbums.length" class="no-data">{{ $t('albums.noRecommendations') }}</div>
       </div>
     </section>
 
     <!-- Ligne 2 : Les mieux notés -->
     <section class="album-row">
-      <h2 class="row-title">Les mieux notés</h2>
+      <h2 class="row-title">{{ $t('albums.topRated') }}</h2>
       <div class="albums-scroll">
         <div 
           v-for="album in topRatedAlbums" 
@@ -96,13 +96,13 @@
             {{ album.average_rating.toFixed(1) }} ★
           </p>
         </div>
-        <div v-if="!topRatedAlbums.length" class="no-data">Aucun album noté</div>
+        <div v-if="!topRatedAlbums.length" class="no-data">{{ $t('albums.noTopRated') }}</div>
       </div>
     </section>
 
     <!-- Ligne 3 : Les plus récents -->
     <section class="album-row">
-      <h2 class="row-title">Sorties récentes</h2>
+      <h2 class="row-title">{{ $t('albums.recentReleases') }}</h2>
       <div class="albums-scroll">
         <div 
           v-for="album in recentAlbums" 
@@ -114,13 +114,13 @@
           <h3>{{ album.title }}</h3>
           <p>{{ album.artist }} ({{ album.release_year }})</p>
         </div>
-        <div v-if="!recentAlbums.length" class="no-data">Aucun album récent</div>
+        <div v-if="!recentAlbums.length" class="no-data">{{ $t('albums.noRecentAlbums') }}</div>
       </div>
     </section>
 
     <!-- Ligne 4 : Chansons à découvrir (aléatoire) -->
     <section class="album-row">
-      <h2 class="row-title">Chansons à découvrir</h2>
+      <h2 class="row-title">{{ $t('albums.songsToDiscover') }}</h2>
       <div class="albums-scroll">
         <div 
           v-for="chanson in randomChansons" 
@@ -131,15 +131,15 @@
           <img :src="chanson.cover_url" :alt="chanson.album_title" class="cover" />
           <h3>{{ chanson.titre }}</h3>
           <p>{{ chanson.artist }}</p>
-          <p class="chanson-album">Album : {{ chanson.album_title }}</p>
+          <p class="chanson-album">{{ $t('albums.trackAlbum') }} {{ chanson.album_title }}</p>
         </div>
-        <div v-if="!randomChansons.length" class="no-data">Aucune chanson disponible</div>
+        <div v-if="!randomChansons.length" class="no-data">{{ $t('albums.noSongsAvailable') }}</div>
       </div>
     </section>
 
     <!-- Ligne 5 : Vos albums préférés (utilisateur connecté uniquement) -->
     <section class="album-row" v-if="isLoggedIn && userTopAlbums.length">
-      <h2 class="row-title">Vos albums préférés</h2>
+      <h2 class="row-title">{{ $t('albums.yourFavoriteAlbums') }}</h2>
       <div class="albums-scroll">
         <div 
           v-for="album in userTopAlbums" 
@@ -150,14 +150,14 @@
           <img :src="album.cover_url" :alt="album.title" class="cover" />
           <h3>{{ album.title }}</h3>
           <p>{{ album.artist }}</p>
-          <p class="album-rating">Votre note : {{ album.user_rating }} ★</p>
+          <p class="album-rating">{{ $t('profile.ratingLabelShort') }} {{ album.user_rating }} ★</p>
         </div>
       </div>
     </section>
 
     <!-- Ligne 6 : Tous les albums (ancienne grille) -->
     <section class="album-row">
-      <h2 class="row-title">Tous les albums</h2>
+      <h2 class="row-title">{{ $t('albums.allAlbums') }}</h2>
       <div class="albums-scroll">
         <div class="album-card" v-for="album in albums" :key="'all-' + album.id" @click="goToAlbum(album.id)">
           <img :src="album.cover_url" :alt="album.title" class="cover"/>
@@ -165,10 +165,10 @@
           <p>{{ album.artist }} ({{ album.release_year }})</p>
           <p>
             <span v-if="album.average_rating">
-              Note&nbsp;: {{ album.average_rating.toFixed(1) }} ★
+              {{ $t('common.rating') }} : {{ album.average_rating.toFixed(1) }} ★
             </span>
             <span v-else>
-              Pas de note
+              {{ $t('profile.noRating') }}
             </span>
           </p>
         </div>
@@ -202,12 +202,12 @@ export default {
       return !!this.userToken;
     },
     usernameDisplay() {
-      if (!this.userToken) return "Anonyme";
+      if (!this.userToken) return this.$t('profile.anonymous');
       try {
         const payload = JSON.parse(atob(this.userToken.split('.')[1]));
-        return payload.username || "Utilisateur";
+        return payload.username || this.$t('profile.user');
       } catch {
-        return "Utilisateur";
+        return this.$t('profile.user');
       }
     },
     profileImage() {

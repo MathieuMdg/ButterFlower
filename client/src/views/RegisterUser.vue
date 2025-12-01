@@ -1,61 +1,65 @@
 <template>
   <div class="auth-page">
     <div class="auth-container">
-      <div class="auth-header">
-        <span class="auth-icon">🎵</span>
-        <h1>Créer un compte</h1>
-        <p class="auth-subtitle">Rejoignez ButterFlower pour noter vos albums préférés</p>
-      </div>
+      <header class="auth-header">
+        <div class="auth-icon">🎵</div>
+        <h1>{{ $t('auth.registerTitle') }}</h1>
+        <p class="auth-subtitle">{{ $t('auth.registerSubtitle') }}</p>
+      </header>
 
-      <form @submit.prevent="handleRegister" class="auth-form">
+      <form class="auth-form" @submit.prevent="register">
         <div class="form-group">
-          <label for="username">Pseudo</label>
-          <input 
+          <label for="username">{{ $t('auth.usernameLabel') }}</label>
+          <input
             id="username"
-            v-model="username" 
-            type="text" 
-            required 
-            placeholder="Votre pseudo"
-            autocomplete="username"
+            v-model="form.username"
+            type="text"
+            :placeholder="$t('auth.usernamePlaceholder')"
+            required
           />
         </div>
 
         <div class="form-group">
-          <label for="email">Email</label>
-          <input 
+          <label for="email">{{ $t('auth.emailLabel') }}</label>
+          <input
             id="email"
-            v-model="email" 
-            type="email" 
-            required 
-            placeholder="votre@email.com"
-            autocomplete="email"
+            v-model="form.email"
+            type="email"
+            :placeholder="$t('auth.emailPlaceholder')"
+            required
           />
         </div>
 
         <div class="form-group">
-          <label for="password">Mot de passe</label>
-          <input 
+          <label for="password">{{ $t('auth.passwordLabel') }}</label>
+          <input
             id="password"
-            v-model="password" 
-            type="password" 
-            required 
-            minlength="6"
-            placeholder="Minimum 6 caractères"
-            autocomplete="new-password"
+            v-model="form.password"
+            type="password"
+            :placeholder="$t('auth.passwordPlaceholder')"
+            required
           />
         </div>
 
-        <button type="submit" class="submit-btn">S'inscrire</button>
-
-        <div v-if="errorMsg" class="message error">{{ errorMsg }}</div>
-        <div v-if="successMsg" class="message success">{{ successMsg }}</div>
+        <button class="submit-btn" type="submit" :disabled="loading">
+          <span v-if="!loading">{{ $t('nav.register') }}</span>
+          <span v-else>...</span>
+        </button>
       </form>
 
+      <p v-if="message" class="message" :class="{ error: isError, success: !isError }">
+        {{ message }}
+      </p>
+
       <div class="auth-footer">
-        <p>Déjà un compte ? <router-link to="/userlogin" class="auth-link">Se connecter</router-link></p>
+        <p class="auth-subtitle">
+          {{ $t('auth.alreadyAccountPrompt') }}
+          <router-link to="/userlogin" class="auth-link">{{ $t('auth.signinLink') }}</router-link>
+        </p>
       </div>
+      
     </div>
-  </div>
+  </div> 
 </template>
 
 <script>
@@ -65,26 +69,32 @@ export default {
   name: 'RegisterUser',
   data() {
     return {
-      username: '',
-      email: '',
-      password: '',
-      errorMsg: '',
-      successMsg: ''
+      form: {
+        username: '',
+        email: '',
+        password: ''
+      },
+      loading: false,
+      message: '',
+      isError: false
     };
   },
   methods: {
-    handleRegister() {
-      this.errorMsg = this.successMsg = '';
-      api.post('/users/register', {
-        username: this.username,
-        email: this.email,
-        password: this.password
-      }).then(() => {
-        this.successMsg = "Compte créé ! Connecte-toi pour continuer.";
-        this.username = this.email = this.password = '';
-      }).catch(err => {
-        this.errorMsg = err.response?.data || err.message || "Inscription impossible";
-      });
+    async register() {
+      this.loading = true;
+      this.message = '';
+      this.isError = false;
+
+      try {
+        await api.post('/users/register', this.form);
+        this.message = this.$t('auth.registerSuccess');
+        this.isError = false;
+      } catch (err) {
+        this.message = this.$t('auth.registerError');
+        this.isError = true;
+      } finally {
+        this.loading = false;
+      }
     }
   }
 };

@@ -3,27 +3,25 @@
     <!-- Écran d'accueil -->
     <div v-if="gameState === 'start'" class="start-screen">
       <div class="start-content">
-        <h1>🎵 Blind Test</h1>
-        <p class="description">
-          Testez vos connaissances musicales !<br>
-          10 questions • 3 points max par question
-        </p>
+        <h1>{{ $t('blindtest.title') }}</h1>
+        <p class="description" v-html="$t('blindtest.description')"></p>
+
         <div class="rules">
           <div class="rule">
             <span class="points">+1</span>
-            <span>Titre de la chanson</span>
+            <span>{{ $t('blindtest.rules.songTitle') }}</span>
           </div>
           <div class="rule">
             <span class="points">+1</span>
-            <span>Nom de l'artiste</span>
+            <span>{{ $t('blindtest.rules.artistName') }}</span>
           </div>
           <div class="rule">
             <span class="points">+1</span>
-            <span>Nom de l'album</span>
+            <span>{{ $t('blindtest.rules.albumName') }}</span>
           </div>
         </div>
         <button @click="startGame" class="btn-start" :disabled="loading">
-          {{ loading ? 'Chargement...' : 'Commencer la partie' }}
+          {{ loading ? $t('blindtest.start.loading') : $t('blindtest.start.startButton') }}
         </button>
       </div>
     </div>
@@ -46,15 +44,15 @@
         <div class="hints-section">
         <!-- Lecteur audio (seulement si audio disponible) -->
         <div v-if="currentQuestion?.audioUrl" class="hint-card audio-hint">
-            <h3>🎧 Extrait audio</h3>
+            <h3>🎧 {{ $t('blindtest.audioExcerpt') }}</h3>
             <div class="audio-player">
             <button @click="toggleAudio" class="btn-play">
-                {{ isPlaying ? '⏸️' : '▶️' }}
+              {{ isPlaying ? '⏸️' : '▶️' }}
             </button>
             <div class="audio-progress">
                 <div class="audio-bar" :style="{ width: audioProgress + '%' }"></div>
             </div>
-            <span class="audio-time">{{ formatTime(currentTime) }} / 0:30</span>
+            <span class="audio-time">{{ formatTime(currentTime) }} / {{ $t('blindtest.audio.timeMax') }}</span>
             </div>
             <audio 
             ref="audioPlayer" 
@@ -66,7 +64,7 @@
 
         <!-- Paroles (seulement si paroles disponibles) -->
         <div v-if="currentQuestion?.paroles" class="hint-card lyrics-hint">
-            <h3>📝 Extrait de paroles</h3>
+            <h3>📝 {{ $t('blindtest.lyricsExcerpt') }}</h3>
             <p class="lyrics-text">"{{ currentQuestion.paroles }}"</p>
         </div>
         </div>
@@ -74,11 +72,11 @@
         <!-- Formulaire de réponse -->
         <div class="answer-form">
           <div class="input-group">
-            <label>Titre de la chanson</label>
+            <label>{{ $t('blindtest.rules.songTitle') }}</label>
             <input 
               v-model="answers.chanson" 
               type="text" 
-              placeholder="Entrez le titre..."
+              :placeholder="$t('blindtest.placeholders.enterTitle')"
               list="chansons-list"
               :disabled="questionValidated"
             >
@@ -88,11 +86,11 @@
           </div>
 
           <div class="input-group">
-            <label>Artiste</label>
+            <label>{{ $t('blindtest.rules.artistName') }}</label>
             <input 
               v-model="answers.artiste" 
               type="text" 
-              placeholder="Entrez l'artiste..."
+              :placeholder="$t('blindtest.placeholders.enterArtist')"
               list="artistes-list"
               :disabled="questionValidated"
             >
@@ -102,11 +100,11 @@
           </div>
 
           <div class="input-group">
-            <label>Album</label>
+            <label>{{ $t('blindtest.rules.albumName') }}</label>
             <input 
               v-model="answers.album" 
               type="text" 
-              placeholder="Entrez l'album..."
+              :placeholder="$t('blindtest.placeholders.enterAlbum')"
               list="albums-list"
               :disabled="questionValidated"
             >
@@ -116,7 +114,7 @@
           </div>
 
           <button @click="validateAnswer" class="btn-validate">
-            Valider ma réponse
+            {{ $t('blindtest.validateAnswer') }}
           </button>
         </div>
       </div>
@@ -125,9 +123,9 @@
       <div v-else class="result-content">
         <div class="result-header">
           <h2 :class="questionScore > 0 ? 'success' : 'fail'">
-            {{ questionScore === 3 ? '🎉 Parfait !' : questionScore > 0 ? '👍 Bien joué !' : '😅 Raté !' }}
+            {{ questionScore === 3 ? $t('blindtest.result.perfect') : questionScore > 0 ? $t('blindtest.result.wellPlayed') : $t('blindtest.result.missed') }}
           </h2>
-          <div class="question-score">+{{ questionScore }} point{{ questionScore !== 1 ? 's' : '' }}</div>
+          <div class="question-score">{{ $t('blindtest.result.pointsPrefix') }}{{ questionScore }} {{ questionScore > 1 ? $t('blindtest.result.pointsPlural') : $t('blindtest.result.point') }}</div>
         </div>
 
         <div class="reveal-card">
@@ -142,24 +140,24 @@
 
         <div class="answers-review">
           <div class="answer-item" :class="{ correct: isCorrect('chanson'), incorrect: !isCorrect('chanson') }">
-            <span class="answer-label">Chanson:</span>
-            <span class="your-answer">{{ answers.chanson || '(vide)' }}</span>
+            <span class="answer-label">{{ $t('blindtest.result.songLabel') }}</span>
+            <span class="your-answer">{{ answers.chanson || $t('blindtest.result.empty') }}</span>
             <span class="icon">{{ isCorrect('chanson') ? '✓' : '✗' }}</span>
           </div>
           <div class="answer-item" :class="{ correct: isCorrect('artiste'), incorrect: !isCorrect('artiste') }">
-            <span class="answer-label">Artiste:</span>
-            <span class="your-answer">{{ answers.artiste || '(vide)' }}</span>
+            <span class="answer-label">{{ $t('blindtest.result.artistLabel') }}</span>
+            <span class="your-answer">{{ answers.artiste || $t('blindtest.result.empty') }}</span>
             <span class="icon">{{ isCorrect('artiste') ? '✓' : '✗' }}</span>
           </div>
           <div class="answer-item" :class="{ correct: isCorrect('album'), incorrect: !isCorrect('album') }">
-            <span class="answer-label">Album:</span>
-            <span class="your-answer">{{ answers.album || '(vide)' }}</span>
+            <span class="answer-label">{{ $t('blindtest.result.albumLabel') }}</span>
+            <span class="your-answer">{{ answers.album || $t('blindtest.result.empty') }}</span>
             <span class="icon">{{ isCorrect('album') ? '✓' : '✗' }}</span>
           </div>
         </div>
 
         <button @click="nextQuestion" class="btn-next">
-          {{ currentQuestionIndex < 9 ? 'Question suivante →' : 'Voir mes résultats' }}
+          {{ currentQuestionIndex < 9 ? $t('blindtest.result.nextQuestion') : $t('blindtest.result.seeResults') }}
         </button>
       </div>
     </div>
@@ -167,12 +165,12 @@
     <!-- Écran de fin -->
     <div v-else-if="gameState === 'finished'" class="end-screen">
       <div class="end-content">
-        <h1>🏆 Partie terminée !</h1>
+        <h1>{{ $t('blindtest.end.gameFinished') }}</h1>
         
         <div class="final-score">
           <div class="score-circle" :class="scoreClass">
             <span class="score-value">{{ totalScore }}</span>
-            <span class="score-max">/ 30</span>
+            <span class="score-max">{{ $t('blindtest.end.finalScoreOf') }}</span>
           </div>
         </div>
 
@@ -183,21 +181,21 @@
         <div class="stats">
           <div class="stat">
             <span class="stat-value">{{ perfectAnswers }}</span>
-            <span class="stat-label">Réponses parfaites</span>
+            <span class="stat-label">{{ $t('blindtest.end.perfectAnswers') }}</span>
           </div>
           <div class="stat">
             <span class="stat-value">{{ partialAnswers }}</span>
-            <span class="stat-label">Réponses partielles</span>
+            <span class="stat-label">{{ $t('blindtest.end.partialAnswers') }}</span>
           </div>
           <div class="stat">
             <span class="stat-value">{{ wrongAnswers }}</span>
-            <span class="stat-label">Mauvaises réponses</span>
+            <span class="stat-label">{{ $t('blindtest.end.wrongAnswers') }}</span>
           </div>
         </div>
 
         <div class="end-actions">
-          <button @click="restartGame" class="btn-restart">🔄 Rejouer</button>
-          <router-link to="/albums" class="btn-back">← Retour aux albums</router-link>
+          <button @click="restartGame" class="btn-restart">{{ $t('blindtest.end.playAgain') }}</button>
+          <router-link to="/albums" class="btn-back">{{ $t('blindtest.end.backToAlbums') }}</router-link>
         </div>
       </div>
     </div>
@@ -257,11 +255,11 @@ export default {
       return 'low';
     },
     scoreMessage() {
-      if (this.totalScore >= 27) return '🎸 Incroyable ! Tu es un vrai mélomane !';
-      if (this.totalScore >= 22) return '🎵 Excellent ! Tu connais bien ta musique !';
-      if (this.totalScore >= 15) return '🎶 Pas mal ! Continue d\'explorer !';
-      if (this.totalScore >= 8) return '🎤 Tu peux faire mieux, réécoute les albums !';
-      return '📻 Il est temps de découvrir de nouvelles musiques !';
+      if (this.totalScore >= 27) return this.$t('blindtest.scoreMessages.incredible');
+      if (this.totalScore >= 22) return this.$t('blindtest.scoreMessages.excellent');
+      if (this.totalScore >= 15) return this.$t('blindtest.scoreMessages.notBad');
+      if (this.totalScore >= 8) return this.$t('blindtest.scoreMessages.canDoBetter');
+      return this.$t('blindtest.scoreMessages.discoverMore');
     }
   },
   methods: {

@@ -1,0 +1,278 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "albums": "Albums",
+    "blindtest": "Blind Test",
+    "myreviews": "Mes Avis",
+    "adminalbums": "Admin Albums",
+    "adminusers": "Admin Utilisateurs",
+    "login": "Connexion",
+    "register": "Inscription",
+    "logout": "Déconnexion"
+  },
+  "common": {
+    "title": "Titre",
+    "artist": "Artiste",
+    "rating": "Note",
+    "review": "Avis",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier"
+  },
+  "language": "Langue",
+
+  "auth": {
+    "loginTitle": "Connexion",
+    "loginSubtitle": "Connectez-vous à votre compte ButterFlower",
+    "emailLabel": "Email",
+    "passwordLabel": "Mot de passe",
+    "emailPlaceholder": "votre@email.com",
+    "passwordPlaceholder": "Votre mot de passe",
+    "loginButton": "Se connecter",
+    "loginError": "Email ou mot de passe incorrect",
+    "noAccountPrompt": "Vous n'avez pas encore de compte ?",
+    "registerLink": "S'inscrire",
+
+    "registerTitle": "Créer un compte",
+    "registerSubtitle": "Rejoignez ButterFlower pour noter vos albums préférés",
+    "usernameLabel": "Nom d'utilisateur",
+    "usernamePlaceholder": "Votre nom d'utilisateur",
+    "passwordMinPlaceholder": "Minimum 6 caractères",
+    "registerButton": "S'inscrire",
+    "registerSuccess": "Compte créé ! Connectez-vous pour continuer.",
+    "registerError": "Échec de l'inscription",
+    "alreadyAccountPrompt": "Vous avez déjà un compte ?",
+    "signinLink": "Se connecter"
+  },
+
+  "profile": {
+    "history": "Historique",
+    "logout": "Déconnexion",
+    "login": "Se connecter",
+    "historyHeader": "Votre historique de notes",
+    "ratingLabelShort": "Votre note :",
+    "stars": "étoile(s)",
+    "reviewsBy": "Avis par",
+    "noReviews": "Aucun avis publié.",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "anonymous": "Anonyme",
+    "user": "Utilisateur",
+    "profileAlt": "Profil",
+    "noRating": "Aucune note",
+    "deleteConfirmError": "Erreur lors de la suppression."
+  },
+
+  "albums": {
+    "recommendedForYou": "Recommandés pour vous",
+    "topRated": "Les mieux notés",
+    "recentReleases": "Sorties récentes",
+    "songsToDiscover": "Morceaux à découvrir",
+    "yourFavoriteAlbums": "Vos albums préférés",
+    "allAlbums": "Tous les albums",
+    "noRecommendations": "Aucune recommandation",
+    "noTopRated": "Aucun album noté",
+    "noRecentAlbums": "Aucun album récent",
+    "noSongsAvailable": "Aucun morceau disponible",
+    "noData": "Aucune donnée",
+    "backToAlbums": "Retour aux albums",
+    "seeAlbum": "Voir l'album",
+    "trackAlbum": "Album :"
+  },
+
+  "blindtest": {
+    "title": "🎵 Blind Test",
+    "description": "Testez vos connaissances musicales !\n10 questions • 3 points max par question",
+    "rules": {
+      "songTitle": "Titre de la chanson",
+      "artistName": "Nom de l'artiste",
+      "albumName": "Nom de l'album"
+    },
+    "start": {
+      "startButton": "Commencer le jeu",
+      "loading": "Chargement..."
+    },
+    "audioExcerpt": "Extrait audio",
+    "lyricsExcerpt": "Extrait de paroles",
+    "placeholders": {
+      "enterTitle": "Entrez le titre...",
+      "enterArtist": "Entrez l'artiste...",
+      "enterAlbum": "Entrez l'album..."
+    },
+    "validateAnswer": "Valider la réponse",
+    "result": {
+      "perfect": "🎉 Parfait !",
+      "wellPlayed": "👍 Bien joué !",
+      "missed": "😅 Raté !",
+      "pointsPrefix": "+",
+      "point": "point",
+      "pointsPlural": "points",
+      "empty": "(vide)",
+      "songLabel": "Chanson :",
+      "artistLabel": "Artiste :",
+      "albumLabel": "Album :",
+      "nextQuestion": "Question suivante →",
+      "seeResults": "Voir mes résultats"
+    },
+    "end": {
+      "gameFinished": "🏆 Jeu terminé !",
+      "finalScoreOf": "/ 30",
+      "perfectAnswers": "Réponses parfaites",
+      "partialAnswers": "Réponses partielles",
+      "wrongAnswers": "Mauvaises réponses",
+      "playAgain": "🔄 Rejouer",
+      "backToAlbums": "Retour aux albums"
+    },
+    "scoreMessages": {
+      "incredible": "🎸 Incroyable ! Vous êtes un vrai passionné de musique !",
+      "excellent": "🎵 Excellent ! Vous connaissez bien votre musique !",
+      "notBad": "🎶 Pas mal ! Continuez à explorer !",
+      "canDoBetter": "🎤 Vous pouvez faire mieux, réécoutez les albums !",
+      "discoverMore": "📻 Il est temps de découvrir de nouvelles musiques !"
+    },
+    "audio": {
+      "play": "Lecture",
+      "pause": "Pause",
+      "timeMax": "0:30"
+    },
+    "errors": {
+      "loadError": "Erreur lors du chargement du blind test",
+      "alertLoadError": "Erreur de chargement du blind test"
+    }
+  },
+
+  "albumDetails": {
+    "backButton": "Retour aux albums",
+    "tracklistTitle": "Liste des pistes",
+    "audioNotAvailable": "Audio non disponible",
+    "play": "Lecture",
+    "pause": "Pause",
+    "noTracksFound": "Aucun morceau trouvé",
+    "nowPlayingLabel": "En cours de lecture :",
+    "addReviewBox": {
+      "title": "Ajouter un avis",
+      "ratingLabel": "Note :",
+      "commentLabel": "Commentaire :",
+      "commentPlaceholder": "Commentaire",
+      "sendButton": "Envoyer",
+      "blockedInfo": "Vous avez été temporairement bloqué. Vous pouvez toujours noter l'album mais pas commenter.",
+      "successPosted": "Avis publié avec succès !",
+      "addError": "Erreur lors de l'ajout de l'avis",
+      "errNotLogged": "Connectez-vous pour noter.",
+      "errRating": "Erreur lors de la notation.",
+      "successTimeoutMs": 3000
+    },
+    "reviews": {
+      "title": "Avis",
+      "unknownUser": "Utilisateur inconnu",
+      "adminDeleteTitle": "Supprimer cet avis",
+      "yourReviewUpdated": "Votre avis a été mis à jour !",
+      "updateFailed": "Échec de la mise à jour",
+      "validate": "Enregistrer",
+      "cancel": "Annuler",
+      "edit": "Modifier"
+    },
+    "userHistory": {
+      "historyOf": "Historique de",
+      "noReviews": "Aucun avis publié."
+    },
+    "errors": {
+      "generalAddReview": "Erreur lors de l'ajout de l'avis",
+      "generalUpdateReview": "Erreur lors de la mise à jour de l'avis"
+    }
+  },
+
+  "admin": {
+    "users": {
+      "pageTitle": "Gestion des utilisateurs",
+      "table": {
+        "id": "ID",
+        "username": "Nom d'utilisateur",
+        "email": "Email",
+        "role": "Rôle",
+        "comments": "Commentaires",
+        "actions": "Actions",
+        "allowed": "Autorisé",
+        "blocked": "Bloqué",
+        "block": "Bloquer",
+        "unblock": "Débloquer"
+      },
+      "userHistory": {
+        "historyOf": "Historique de",
+        "noHistory": "Aucun avis publié.",
+        "delete": "Supprimer",
+        "ratingLabel": "Note :"
+      },
+      "accessDenied": {
+        "title": "Accès refusé",
+        "message": "Vous n'avez pas les permissions nécessaires pour accéder à cette page."
+      }
+    },
+    "albums": {
+      "pageTitle": "Gestion des albums",
+      "addAlbumButton": "Ajouter un album",
+      "table": {
+        "cover": "Pochette",
+        "title": "Titre",
+        "artist": "Artiste",
+        "year": "Année",
+        "genre": "Genre",
+        "actions": "Actions",
+        "noGenre": "-"
+      },
+      "modal": {
+        "addTitle": "Ajouter un album",
+        "editTitle": "Modifier l'album",
+        "labels": {
+          "title": "Titre *",
+          "artist": "Artiste *",
+          "releaseYear": "Année de sortie",
+          "genre": "Genre",
+          "coverUrl": "URL de la pochette",
+          "previewLabel": "Aperçu :"
+        },
+        "placeholders": {
+          "title": "Titre de l'album",
+          "artist": "Nom de l'artiste",
+          "year": "2024",
+          "coverUrl": "https://..."
+        },
+        "actions": {
+          "cancel": "Annuler",
+          "add": "Ajouter",
+          "edit": "Modifier"
+        },
+        "coverErrorPlaceholder": "https://via.placeholder.com/100x100?text=Erreur"
+      },
+      "deleteConfirm": {
+        "title": "Supprimer cet album ?",
+        "messagePrefix": "Êtes-vous sûr de vouloir supprimer",
+        "messageSuffix": "Cette action supprimera également tous les avis et morceaux associés.",
+        "warningText": "Cela supprimera également tous les avis et morceaux associés.",
+        "cancel": "Annuler",
+        "confirmDelete": "Supprimer"
+      },
+      "notifications": {
+        "albumUpdated": "Album mis à jour avec succès",
+        "albumAdded": "Album ajouté avec succès",
+        "albumDeleted": "Album supprimé avec succès",
+        "loadError": "Erreur lors du chargement des albums",
+        "operationError": "Erreur lors de l'opération",
+        "deleteError": "Erreur lors de la suppression"
+      },
+      "accessDenied": {
+        "title": "Accès refusé",
+        "message": "Vous n'avez pas les permissions nécessaires pour accéder à cette page."
+      }
+    }
+  },
+
+  "ui": {
+    "loadingAlbum": "Chargement de l'album...",
+    "noDataItalic": "Aucune donnée",
+    "confirm": "Confirmer",
+    "close": "Fermer",
+    "search": "Rechercher"
+  }
+}

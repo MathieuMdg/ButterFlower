@@ -1,18 +1,18 @@
 <template>
   <div v-if="isAdmin" class="admin-page">
     <div class="admin-container">
-      <h2 class="admin-title">Gestion des utilisateurs</h2>
+      <h2 class="admin-title">{{ $t('admin.users.pageTitle') }}</h2>
       
       <div class="table-wrapper">
         <table class="admin-table">
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Pseudo</th>
-              <th>Email</th>
-              <th>Rôle</th>
-              <th>Commentaires</th>
-              <th>Actions</th>
+              <th>{{ $t('admin.users.table.id') }}</th>
+              <th>{{ $t('admin.users.table.username') }}</th>
+              <th>{{ $t('admin.users.table.email') }}</th>
+              <th>{{ $t('admin.users.table.role') }}</th>
+              <th>{{ $t('admin.users.table.comments') }}</th>
+              <th>{{ $t('admin.users.table.actions') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -29,7 +29,7 @@
               </td>
               <td>
                 <span class="status-badge" :class="u.can_comment ? 'active' : 'blocked'">
-                  {{ u.can_comment ? 'Autorisé' : 'Bloqué' }}
+                  {{ u.can_comment ? $t('admin.users.table.allowed') : $t('admin.users.table.blocked') }}
                 </span>
               </td>
               <td>
@@ -38,14 +38,14 @@
                   class="action-btn block-btn" 
                   @click="block(u.id)"
                 >
-                  Bloquer
+                  {{ $t('admin.users.table.block') }}
                 </button>
                 <button 
                   v-else 
                   class="action-btn unblock-btn" 
                   @click="unblock(u.id)"
                 >
-                  Débloquer
+                  {{ $t('admin.users.table.unblock') }}
                 </button>
               </td>
             </tr>
@@ -61,7 +61,7 @@
         @click.stop
       >
         <div class="popup-header">
-          <span>Historique de {{ userHistoryName }}</span>
+          <span>{{ $t('admin.users.userHistory.historyOf') }} {{ userHistoryName }}</span>
           <button @click.stop="closeUserHistory" class="popup-close-btn">✕</button>
         </div>
         <div class="popup-content">
@@ -72,18 +72,19 @@
                 <span class="history-artist">({{ r.artist }})</span>
               </div>
               <div class="history-rating">
-                Note : <span class="rating-value">{{ r.rating }} ★</span>
+                {{ $t('admin.users.userHistory.ratingLabel') }}
+                <span class="rating-value">{{ r.rating }} ★</span>
               </div>
               <div v-if="r.review_text && r.review_text.trim() !== ''" class="history-comment">
                 « {{ r.review_text }} »
               </div>
               <button class="delete-review-btn" @click.stop="adminDeleteReview(r.id)">
-                Supprimer
+                {{ $t('admin.users.userHistory.delete') }}
               </button>
             </div>
           </div>
           <div v-else class="no-history">
-            <em>Aucun avis posté.</em>
+            <em>{{ $t('admin.users.userHistory.noHistory') }}</em>
           </div>
         </div>
       </div>
@@ -93,8 +94,8 @@
   <div v-else class="access-denied">
     <div class="denied-content">
       <span class="denied-icon">🔒</span>
-      <h2>Accès refusé</h2>
-      <p>Vous n'avez pas les permissions nécessaires pour accéder à cette page.</p>
+      <h2>{{ $t('admin.users.accessDenied.title') }}</h2>
+      <p>{{ $t('admin.users.accessDenied.message') }}</p>
     </div>
   </div>
 </template>
