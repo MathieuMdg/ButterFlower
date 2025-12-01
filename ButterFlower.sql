@@ -4,7 +4,7 @@ USE `butterflower`;
 --
 -- Host: localhost    Database: butterflower
 -- ------------------------------------------------------
--- Server version	9.2.0
+-- Server version	8.0.41
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -91,7 +91,7 @@ CREATE TABLE `notes_chansons` (
   UNIQUE KEY `unique_user_chanson` (`user_id`,`chanson_id`),
   KEY `chanson_id` (`chanson_id`),
   CONSTRAINT `notes_chansons_ibfk_1` FOREIGN KEY (`chanson_id`) REFERENCES `chansons` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,7 +100,7 @@ CREATE TABLE `notes_chansons` (
 
 LOCK TABLES `notes_chansons` WRITE;
 /*!40000 ALTER TABLE `notes_chansons` DISABLE KEYS */;
-INSERT INTO `notes_chansons` VALUES (1,1,2,3),(2,2,2,4),(3,3,2,2),(4,8,1,4),(5,8,2,4);
+INSERT INTO `notes_chansons` VALUES (1,1,2,3),(2,2,2,4),(3,3,2,2),(4,8,1,4),(5,8,2,4),(6,4,5,5),(7,3,5,4),(8,2,5,4),(9,1,5,4),(12,5,5,5),(13,6,5,5),(14,7,5,5),(15,8,5,5),(16,9,5,4);
 /*!40000 ALTER TABLE `notes_chansons` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -124,7 +124,7 @@ CREATE TABLE `reviews` (
   CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`album_id`) REFERENCES `albums` (`id`),
   CONSTRAINT `reviews_chk_1` CHECK ((`rating` between 1 and 10))
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -133,7 +133,7 @@ CREATE TABLE `reviews` (
 
 LOCK TABLES `reviews` WRITE;
 /*!40000 ALTER TABLE `reviews` DISABLE KEYS */;
-INSERT INTO `reviews` VALUES (16,2,4,5.0,'Masterpiece!!!','2025-11-25 14:51:41'),(18,2,1,4.0,'skibidi','2025-11-26 10:13:50'),(19,2,10,3.5,NULL,'2025-11-26 10:36:17'),(20,2,14,5.0,'It\'s just so peak','2025-11-26 11:34:46'),(21,1,14,4.5,'So strange yet so good!!','2025-11-28 17:29:04');
+INSERT INTO `reviews` VALUES (16,2,4,5.0,'Masterpiece!!!','2025-11-25 14:51:41'),(18,2,1,4.0,'skibidi','2025-11-26 10:13:50'),(19,2,10,3.5,NULL,'2025-11-26 10:36:17'),(20,2,14,5.0,'It\'s just so peak','2025-11-26 11:34:46'),(21,1,14,4.5,'So strange yet so good!!','2025-11-28 17:29:04'),(23,5,1,5.0,'raaaah','2025-12-01 18:24:32'),(24,5,4,5.0,'blud knows his music ong fr fr','2025-12-01 18:29:26'),(25,5,14,3.0,'its aight','2025-12-01 18:40:45'),(26,5,10,1.0,'rawr','2025-12-01 18:41:20'),(27,5,6,4.5,'oh my days broski','2025-12-01 18:41:34'),(28,5,5,3.5,'这张专辑还可以。','2025-12-01 18:42:42'),(29,5,2,4.0,'pov tu marches ?‍➡️','2025-12-01 18:44:02');
 /*!40000 ALTER TABLE `reviews` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -153,7 +153,7 @@ CREATE TABLE `users` (
   `can_comment` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -162,7 +162,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Mama','mama@gmail.com','$2b$10$akcdDRjMe79nJyfOygznUuRDkx9NqldyKNMbWcw9NWTm8B3p00P0u','user',1),(2,'Mathieu_Mdg','mathieu.mdg@gmail.com','$2b$10$wOt883d3jwuqIQcs4dTSLO.e5LGsKCsIj9tzTD8CcCgvLJ8WYeAaO','user',1),(3,'Bloque','bloque@gmail.com','$2b$10$T3tLAeMmKETygkia0V0PQe.aqz.xr/FyYJf0Y543y4EBFYBkKvkS2','user',0),(4,'Admin','admin@gmail.com','$2b$10$Sg22IdgGz0oJL2lcz/wtke.5y8Rsa.4HcF/Tlta2C46aSSFj.TTzS','admin',1);
+INSERT INTO `users` VALUES (1,'Mama','mama@gmail.com','$2b$10$akcdDRjMe79nJyfOygznUuRDkx9NqldyKNMbWcw9NWTm8B3p00P0u','user',1),(2,'Mathieu_Mdg','mathieu.mdg@gmail.com','$2b$10$wOt883d3jwuqIQcs4dTSLO.e5LGsKCsIj9tzTD8CcCgvLJ8WYeAaO','user',1),(3,'Bloque','bloque@gmail.com','$2b$10$T3tLAeMmKETygkia0V0PQe.aqz.xr/FyYJf0Y543y4EBFYBkKvkS2','user',0),(4,'Admin','admin@gmail.com','$2b$10$Sg22IdgGz0oJL2lcz/wtke.5y8Rsa.4HcF/Tlta2C46aSSFj.TTzS','admin',1),(5,'yohanes','yoann@gmail.com','$2b$10$c.xwWssYIPTRukcoX8eZGOpi.ObnoXNzsfdBDdgGWqTY1/KMrZW2y','user',1),(6,'yohanes admin','newadmin@gmail.com','$2b$10$eMBEKkZ.YXFtHPm4SyY6.OXs4k3nOZJme0nu8cJPWdV2R7LmlsMEK','admin',1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -175,4 +175,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-12-01 17:23:15
+-- Dump completed on 2025-12-01 20:36:39
