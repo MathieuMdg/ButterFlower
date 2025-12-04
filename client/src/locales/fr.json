@@ -241,6 +241,7 @@
         "actions": {
           "cancel": "Annuler",
           "add": "Ajouter",
+          "save": "Sauvegarder",
           "edit": "Modifier"
         },
         "coverErrorPlaceholder": "https://via.placeholder.com/100x100?text=Erreur"

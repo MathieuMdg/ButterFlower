@@ -253,7 +253,7 @@ export default {
           }
         }
       } catch (err) {
-        console.error('Erreur lors du chargement des données:', err);
+        console.error('Error while loading data:', err);
       }
     },
     getUserIdFromToken(token) {

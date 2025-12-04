@@ -32,7 +32,7 @@ CREATE TABLE `albums` (
   `release_year` int DEFAULT NULL,
   `genre` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `albums` (
 
 LOCK TABLES `albums` WRITE;
 /*!40000 ALTER TABLE `albums` DISABLE KEYS */;
-INSERT INTO `albums` VALUES (1,'Random Access Memories','Daft Punk','https://media.pitchfork.com/photos/63f641d801dbe796fab80055/1:1/w_320,c_limit/Daft-Punk-Random-Access-Memories.jpg',2013,'Électronique'),(2,'Abbey Road','The Beatles','https://m.media-amazon.com/images/I/61Nf4UVtDkL._SY300_SX300_QL70_FMwebp_.jpg',1969,'Rock'),(3,'Lemonade','Beyoncé','https://upload.wikimedia.org/wikipedia/en/5/53/Beyonce_-_Lemonade_%28Official_Album_Cover%29.png',2016,'Pop'),(4,'Thriller','Michael Jackson','https://upload.wikimedia.org/wikipedia/en/5/55/Michael_Jackson_-_Thriller.png',1982,'Pop'),(5,'Nevermind','Nirvana','https://upload.wikimedia.org/wikipedia/en/b/b7/NirvanaNevermindalbumcover.jpg',1991,'Rock'),(6,'Back To Black','Amy Winehouse','https://m.media-amazon.com/images/I/71YhebDzEtL._UF1000,1000_QL80_.jpg',2006,'Soul'),(7,'To Pimp a Butterfly','Kendrick Lamar','https://m.media-amazon.com/images/I/81015y0a1hL._UF1000,1000_QL80_.jpg',2015,'Hip-Hop'),(8,'A Rush of Blood to the Head','Coldplay','https://m.media-amazon.com/images/I/71ag0NTZyvL._UF1000,1000_QL80_.jpg',2002,'Rock'),(9,'Discovery','Daft Punk','https://m.media-amazon.com/images/I/71bsHTr6idL._UF1000,1000_QL80_.jpg',2001,'Électronique'),(10,'Lateralus','Tool','https://i.ebayimg.com/images/g/JaYAAOSwsJJiOI-d/s-l1200.jpg',2001,'Metal'),(11,'Melodrama','Lorde','https://m.media-amazon.com/images/I/51Ti1Xc5I+L._SY300_SX300_QL70_FMwebp_.jpg',2017,'Pop'),(12,'Good Kid, M.A.A.D City','Kendrick Lamar','https://upload.wikimedia.org/wikipedia/en/thumb/9/93/KendrickGKMC.jpg/250px-KendrickGKMC.jpg',2012,'Hip-Hop'),(13,'Homework','Daft Punk','https://m.media-amazon.com/images/I/71A1gmVPm-L._UF1000,1000_QL80_.jpg',1997,'Électronique'),(14,'DON\'T TAP THE GLASS','Tyler, The Creator','https://m.media-amazon.com/images/I/31sDbu7nBBL._UXNaN_FMjpg_QL85_.jpg',2025,'Hip-hop');
+INSERT INTO `albums` VALUES (1,'Random Access Memories','Daft Punk','https://media.pitchfork.com/photos/63f641d801dbe796fab80055/1:1/w_320,c_limit/Daft-Punk-Random-Access-Memories.jpg',2013,'Electro'),(2,'Abbey Road','The Beatles','https://m.media-amazon.com/images/I/61Nf4UVtDkL._SY300_SX300_QL70_FMwebp_.jpg',1969,'Rock'),(3,'Lemonade','Beyoncé','https://upload.wikimedia.org/wikipedia/en/5/53/Beyonce_-_Lemonade_%28Official_Album_Cover%29.png',2016,'Pop'),(4,'Thriller','Michael Jackson','https://upload.wikimedia.org/wikipedia/en/5/55/Michael_Jackson_-_Thriller.png',1982,'Pop'),(5,'Nevermind','Nirvana','https://upload.wikimedia.org/wikipedia/en/b/b7/NirvanaNevermindalbumcover.jpg',1991,'Rock'),(6,'Back To Black','Amy Winehouse','https://m.media-amazon.com/images/I/71YhebDzEtL._UF1000,1000_QL80_.jpg',2006,'Soul'),(7,'To Pimp a Butterfly','Kendrick Lamar','https://m.media-amazon.com/images/I/81015y0a1hL._UF1000,1000_QL80_.jpg',2015,'Hip-Hop'),(8,'A Rush of Blood to the Head','Coldplay','https://m.media-amazon.com/images/I/71ag0NTZyvL._UF1000,1000_QL80_.jpg',2002,'Rock'),(9,'Discovery','Daft Punk','https://m.media-amazon.com/images/I/71bsHTr6idL._UF1000,1000_QL80_.jpg',2001,'Electro'),(10,'Lateralus','Tool','https://i.ebayimg.com/images/g/JaYAAOSwsJJiOI-d/s-l1200.jpg',2001,'Metal'),(11,'Melodrama','Lorde','https://m.media-amazon.com/images/I/51Ti1Xc5I+L._SY300_SX300_QL70_FMwebp_.jpg',2017,'Pop'),(12,'Good Kid, M.A.A.D City','Kendrick Lamar','https://upload.wikimedia.org/wikipedia/en/thumb/9/93/KendrickGKMC.jpg/250px-KendrickGKMC.jpg',2012,'Hip-Hop'),(13,'Homework','Daft Punk','https://m.media-amazon.com/images/I/71A1gmVPm-L._UF1000,1000_QL80_.jpg',1997,'Electro'),(14,'DON\'T TAP THE GLASS','Tyler, The Creator','https://m.media-amazon.com/images/I/31sDbu7nBBL._UXNaN_FMjpg_QL85_.jpg',2025,'Hip-hop'),(16,'Starboy','The Weeknd','https://upload.wikimedia.org/wikipedia/en/3/39/The_Weeknd_-_Starboy.png',2016,'Pop'),(17,'All Eyez on Me','2Pac','https://upload.wikimedia.org/wikipedia/en/1/16/Alleyezonme.jpg',1996,'Hip-Hop'),(18,'Utopia','Travis Scott','https://upload.wikimedia.org/wikipedia/en/2/23/Travis_Scott_-_Utopia.png',2023,'Hip-Hop'),(19,'ALBUM','Yuno Miles','https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Yuno_Miles_-_Album_cover.png/1200px-Yuno_Miles_-_Album_cover.png?20251129212453',2025,'Brainrot'),(20,'Hardstone Psycho','Don Toliver','https://upload.wikimedia.org/wikipedia/en/2/21/Don_Toliver_-_Hardstone_Psycho.png',2024,'Hip-Hop'),(21,'Lyfë','Yeat','https://upload.wikimedia.org/wikipedia/en/4/48/Lyf%C3%AB.jpeg',2022,'Hip-Hop'),(22,'For All The Dogs','Drake','https://upload.wikimedia.org/wikipedia/en/0/05/Drake_-_For_All_The_Dogs.png',2023,'Hip-Hop'),(23,'Scorpion','Drake','https://upload.wikimedia.org/wikipedia/en/9/90/Scorpion_by_Drake.jpg',2018,'Hip-Hop'),(24,'ZZCCMXTP','Legendes Industries','https://i.scdn.co/image/ab67616d0000b2731fa62ed2dcf0569d9b9ff509',2022,'Brainrot'),(25,'Whole Lotta Red','Playboy Carti','https://upload.wikimedia.org/wikipedia/en/6/6c/Playboi_Carti_-_Whole_Lotta_Red.png',2020,'Hip-Hop');
 /*!40000 ALTER TABLE `albums` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -124,7 +124,7 @@ CREATE TABLE `reviews` (
   CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`album_id`) REFERENCES `albums` (`id`),
   CONSTRAINT `reviews_chk_1` CHECK ((`rating` between 1 and 10))
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -133,7 +133,7 @@ CREATE TABLE `reviews` (
 
 LOCK TABLES `reviews` WRITE;
 /*!40000 ALTER TABLE `reviews` DISABLE KEYS */;
-INSERT INTO `reviews` VALUES (16,2,4,5.0,'Masterpiece!!!','2025-11-25 14:51:41'),(18,2,1,4.0,'skibidi','2025-11-26 10:13:50'),(19,2,10,3.5,NULL,'2025-11-26 10:36:17'),(20,2,14,5.0,'It\'s just so peak','2025-11-26 11:34:46'),(21,1,14,4.5,'So strange yet so good!!','2025-11-28 17:29:04'),(23,5,1,5.0,'raaaah','2025-12-01 18:24:32'),(24,5,4,5.0,'blud knows his music ong fr fr','2025-12-01 18:29:26'),(25,5,14,3.0,'its aight','2025-12-01 18:40:45'),(26,5,10,1.0,'rawr','2025-12-01 18:41:20'),(27,5,6,4.5,'oh my days broski','2025-12-01 18:41:34'),(28,5,5,3.5,'这张专辑还可以。','2025-12-01 18:42:42'),(29,5,2,4.0,'pov tu marches ?‍➡️','2025-12-01 18:44:02');
+INSERT INTO `reviews` VALUES (16,2,4,5.0,'Masterpiece!!!','2025-11-25 14:51:41'),(18,2,1,4.0,'skibidi','2025-11-26 10:13:50'),(19,2,10,3.5,NULL,'2025-11-26 10:36:17'),(20,2,14,5.0,'It\'s just so peak','2025-11-26 11:34:46'),(21,1,14,4.5,'So strange yet so good!!','2025-11-28 17:29:04'),(23,5,1,5.0,'raaaah','2025-12-01 18:24:32'),(24,5,4,5.0,'blud knows his music ong fr fr','2025-12-01 18:29:26'),(25,5,14,3.0,'its aight','2025-12-01 18:40:45'),(26,5,10,1.0,'rawr','2025-12-01 18:41:20'),(27,5,6,4.5,'oh my days broski','2025-12-01 18:41:34'),(28,5,5,3.5,'这张专辑还可以。','2025-12-01 18:42:42'),(29,5,2,4.0,'pov tu marches ?‍➡️','2025-12-01 18:44:02'),(30,6,19,4.0,'omggg im in love yuno miles you so handsome','2025-12-04 23:41:40'),(31,6,25,3.5,'fweh','2025-12-04 23:41:54'),(32,6,24,4.0,'en légendre','2025-12-04 23:42:08');
 /*!40000 ALTER TABLE `reviews` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -175,4 +175,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-12-01 20:36:39
+-- Dump completed on 2025-12-04 23:49:01
