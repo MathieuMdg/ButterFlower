@@ -52,6 +52,10 @@ import frFlag from '@/assets/flag_france.png';
 export default {
   name: 'AppNavbar',
 
+  mounted() {
+    document.title = 'ButterFlower';
+  },
+
   data() {
     return {
       ukFlag,

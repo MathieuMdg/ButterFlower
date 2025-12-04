@@ -23,54 +23,50 @@
         <div class="album-chansons" v-if="chansons.length">
           <h3 class="chansons-title">{{ $t('albumDetails.tracklistTitle') }}</h3>
           
-          <div class="chanson-row" v-for="(chanson, index) in chansons" :key="chanson.id">
-            <!-- Bouton Play/Pause -->
-            <button 
-              class="play-btn" 
-              @click="togglePlay(index)"
-              :disabled="!chanson.url_audio"
-              :title="!chanson.url_audio ? this.$t('albumDetails.audioNotAvailable') : (currentPlaying === index ? this.$t('albumDetails.pause') : this.$t('albumDetails.play'))"
-            >
-              <span v-if="currentPlaying === index && isPlaying">⏸</span>
-              <span v-else>▶</span>
-            </button>
+          <div v-for="(chanson, index) in chansons" :key="chanson.id" class="chanson-wrapper">
+            <div class="chanson-row">
+              <!-- Bouton Play -->
+              <button 
+                class="play-btn" 
+                @click="selectChanson(index)"
+                :class="{ active: currentPlaying === index }"
+                :title="this.$t('albumDetails.play')"
+              >
+                <span>▶</span>
+              </button>
 
-            <!-- Infos chanson -->
-            <div class="chanson-info">
-              <span class="chanson-title">{{ chanson.titre }} - </span>
-              <span class="chanson-duration" v-if="chanson.duree">{{ chanson.duree }}</span>
+              <!-- Infos chanson -->
+              <div class="chanson-info">
+                <span class="chanson-title">{{ chanson.titre }} - </span>
+                <span class="chanson-duration" v-if="chanson.duree">{{ chanson.duree }}</span>
+              </div>
+
+              <!-- Notation -->
+              <div class="chanson-rating">
+                <StarRating
+                  :modelValue="chanson.my_note"
+                  @update:modelValue="noteChanson(chanson.id, $event)"
+                />
+              </div>
             </div>
 
-            <!-- Notation -->
-            <div class="chanson-rating">
-              <StarRating
-                :modelValue="chanson.my_note"
-                @update:modelValue="noteChanson(chanson.id, $event)"
-              />
+            <!-- IFrame Player - RIGHT UNDER CLICKED SONG -->
+            <div v-if="currentPlaying === index && chanson.url_audio" class="iframe-player-inline">
+              <iframe
+                :key="currentPlaying"
+                :src="getAutoplayUrl(chanson.url_audio)"
+                :title="chanson.titre || 'Song Title'"
+                width="100%"
+                height="152"
+                style="border-radius:12px"
+                allowfullscreen
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"
+                class="song-iframe"
+              ></iframe>
             </div>
           </div>
-
-          <!-- Lecteur audio caché (contrôlé par JS) -->
-          <audio 
-            ref="audioPlayer" 
-            @ended="onAudioEnded"
-            @timeupdate="onTimeUpdate"
-          ></audio>
-
-          <!-- Barre de progression -->
-          <div class="audio-progress-bar" v-if="currentPlaying !== null">
-            <div class="now-playing">
-              <span class="now-playing-label">{{ $t('albumDetails.nowPlayingLabel') }}</span>
-              <span class="now-playing-title">{{ chansons[currentPlaying]?.titre }}</span>
-            </div>
-            <div class="progress-container" @click="seekAudio">
-              <div class="progress-fill" :style="{ width: progressPercent + '%' }"></div>
-            </div>
-            <div class="time-display">
-              <span>{{ formatTime(currentTime) }}</span>
-              <span>{{ formatTime(duration) }}</span>
-            </div>
-          </div>
+          
         </div>
 
         <div v-else class="no-chansons">
@@ -189,6 +185,7 @@
 <script>
 import api from '../api';
 import StarRating from "../components/StarRating.vue";
+
 export default {
   props: ['id'],
   components: { StarRating },
@@ -209,11 +206,7 @@ export default {
       userHistory: [],
       userHistoryName: '',
       chansons: [],
-      currentPlaying: null, 
-      isPlaying: false,     
-      currentTime: 0,        
-      duration: 0,          
-      progressPercent: 0,
+      currentPlaying: null
     };
   },
   mounted() {
@@ -241,7 +234,6 @@ export default {
     }
   },
   beforeUnmount() {
-    this.stopAudio();
     window.removeEventListener('click', this.closeUserHistory);
   },
 
@@ -257,6 +249,34 @@ export default {
     }
   },
   methods: {
+    selectChanson(index) {
+      this.currentPlaying = this.currentPlaying === index ? null : index;
+    },
+
+    getAutoplayUrl(url) {
+      if (!url) return '';
+      
+      // Handle Spotify embed URLs
+      if (url.includes('spotify.com/embed/')) {
+        // Already an embed URL, just ensure it has autoplay
+        return url.includes('?') ? url : url + '?utm_source=generator';
+      }
+      
+      // Convert Spotify track URLs to embed format
+      if (url.includes('spotify.com/track/')) {
+        const trackId = url.split('track/')[1].split('?')[0];
+        return `https://open.spotify.com/embed/track/${trackId}?utm_source=generator`;
+      }
+      
+      // Handle YouTube (fallback)
+      if (url.includes('youtube.com/embed/')) {
+        const separator = url.includes('?') ? '&' : '?';
+        return `${url}${separator}autoplay=1&mute=0`;
+      }
+      
+      return url;
+    },
+
     async noteChanson(chansonId, note) {
       if (!this.userToken) {
         this.err = this.$t('albumDetails.addReviewBox.errNotLogged');
@@ -381,92 +401,6 @@ export default {
         alert("Erreur lors de la suppression.");
       }
     },
-
-      togglePlay(index) {
-        const audio = this.$refs.audioPlayer;
-        const chanson = this.chansons[index];
-
-        if (!chanson.url_audio) return;
-
-        // Si on clique sur la même chanson
-        if (this.currentPlaying === index) {
-          if (this.isPlaying) {
-            audio.pause();
-            this.isPlaying = false;
-          } else {
-            audio.play();
-            this.isPlaying = true;
-          }
-        } else {
-          // Nouvelle chanson
-          this.currentPlaying = index;
-          audio.src = chanson.url_audio;
-          audio.load();
-          audio.play();
-          this.isPlaying = true;
-          
-          // Récupérer la durée une fois chargée
-          audio.onloadedmetadata = () => {
-            this.duration = audio.duration;
-          };
-        }
-      },
-
-      // Quand la chanson se termine
-      onAudioEnded() {
-        // Passer à la chanson suivante automatiquement
-        if (this.currentPlaying < this.chansons.length - 1) {
-          this.togglePlay(this.currentPlaying + 1);
-        } else {
-          // Fin de la playlist
-          this.isPlaying = false;
-          this.currentPlaying = null;
-          this.progressPercent = 0;
-          this.currentTime = 0;
-        }
-      },
-
-      // Mise à jour du temps
-      onTimeUpdate() {
-        const audio = this.$refs.audioPlayer;
-        if (audio && audio.duration) {
-          this.currentTime = audio.currentTime;
-          this.progressPercent = (audio.currentTime / audio.duration) * 100;
-        }
-      },
-
-      // Clic sur la barre de progression pour naviguer
-      seekAudio(event) {
-        const audio = this.$refs.audioPlayer;
-        if (!audio || !audio.duration) return;
-
-        const progressBar = event.currentTarget;
-        const clickX = event.offsetX;
-        const width = progressBar.offsetWidth;
-        const seekTime = (clickX / width) * audio.duration;
-        
-        audio.currentTime = seekTime;
-      },
-
-      // Formater le temps en mm:ss
-      formatTime(seconds) {
-        if (!seconds || isNaN(seconds)) return '0:00';
-        const mins = Math.floor(seconds / 60);
-        const secs = Math.floor(seconds % 60);
-        return `${mins}:${secs.toString().padStart(2, '0')}`;
-      },
-
-      // Arrêter la lecture quand on quitte la page
-      stopAudio() {
-        const audio = this.$refs.audioPlayer;
-        if (audio) {
-          audio.pause();
-          audio.src = '';
-        }
-        this.isPlaying = false;
-        this.currentPlaying = null;
-      },
-
   }
 };
 </script>
@@ -539,7 +473,7 @@ export default {
    LEFT SIDE - COVER & INFOS
    ═══════════════════════════════════════════════════════════ */
 .left-side {
-  flex: 0 0 250px;  /* Réduit de 320px à 250px */
+  flex: 0 0 400px;  /* Réduit de 320px à 250px */
   display: flex;
   flex-direction: column;
 }
@@ -601,7 +535,14 @@ export default {
 .album-chansons {
   margin-top: 1.5em;
   width: 100%;
-  max-width: 250px;  /* Limiter la largeur */
+  max-width: 250px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5em;
+}
+
+.chanson-row {
+  display: contents;
 }
 
 .chansons-title {
@@ -640,6 +581,15 @@ export default {
   justify-content: center;
   transition: transform 0.15s ease, filter 0.15s ease;
   flex-shrink: 0;
+}
+
+.play-btn.active {
+  background: var(--accent-green);
+  filter: brightness(1.2);
+}
+
+.play-btn:hover {
+  transform: scale(1.1);
 }
 
 .chanson-number {
@@ -1241,6 +1191,79 @@ export default {
 
   .chanson-number {
     display: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   IFRAME PLAYER - YouTube style
+   ═══════════════════════════════════════════════════════════ */
+.iframe-player {
+  margin-top: 1.5em;
+  padding: 1em;
+  background: var(--bg-card);
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  max-width: 100%;
+  width: 100%;
+}
+
+.song-iframe {
+  border: none;
+  border-radius: 6px;
+  margin-top: 0.8em;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .iframe-player {
+    max-width: 100%;
+  }
+
+  .song-iframe {
+    height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .song-iframe {
+    height: 150px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   IFRAME PLAYER - INLINE (under song row)
+   ═══════════════════════════════════════════════════════════ */
+.iframe-player-inline {
+  grid-column: 1 / -1;
+  margin-top: 1em;
+  margin-bottom: 1.5em;
+  padding: 1em;
+  background: var(--bg-card);
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  width: 100%;
+  animation: slideDown 0.3s ease;
+}
+
+.song-iframe {
+  border: none;
+  border-radius: 6px;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .song-iframe {
+    height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .song-iframe {
+    height: 150px;
   }
 }
 </style>

@@ -71,7 +71,7 @@ CREATE TABLE `chansons` (
 
 LOCK TABLES `chansons` WRITE;
 /*!40000 ALTER TABLE `chansons` DISABLE KEYS */;
-INSERT INTO `chansons` VALUES (1,'Wanna Be Startin\' Somethin\'',4,'6:03','https://example.com/audio/wanna-be-startin.mp3','You wanna be startin somethin'),(2,'Baby Be Mine',4,'4:20','https://example.com/audio/baby-be-mine.mp3','The doggone girl is mine'),(3,'The Girl Is Mine',4,'3:42','https://example.com/audio/the-girl-is-mine.mp3','The girl is mine'),(4,'Thriller',4,'5:57','https://example.com/audio/thriller.mp3','Cause this is thriller'),(5,'Beat It',4,'4:18','https://example.com/audio/beat-it.mp3','Just beat it'),(6,'Billie Jean',4,'4:54','https://example.com/audio/billie-jean.mp3','Billie Jean is not my lover'),(7,'Human Nature',4,'4:06','https://example.com/audio/human-nature.mp3','If they say why why'),(8,'P.Y.T. (Pretty Young Thing)',4,'3:59','https://example.com/audio/pyt.mp3','Pretty young thing'),(9,'The Lady in My Life',4,'4:59','https://example.com/audio/the-lady.mp3','She is the one');
+INSERT INTO `chansons` VALUES (1,'Wanna Be Startin\' Somethin\'',4,'6:03','https://open.spotify.com/embed/track/1hu2s7qkm5bo03eODpRQO3?utm_source=generator','You wanna be startin somethin'),(2,'Baby Be Mine',4,'4:20','https://open.spotify.com/embed/track/6XYbMGvtl6tlPoGWaiH7EY?utm_source=generator','The doggone girl is mine'),(3,'The Girl Is Mine',4,'3:42','https://open.spotify.com/embed/track/4IT6vDuKprKl6jyVndlY8V?utm_source=generator','The girl is mine'),(4,'Thriller',4,'5:57','https://open.spotify.com/embed/track/2LlQb7Uoj1kKyGhlkBf9aC?utm_source=generator','Cause this is thriller'),(5,'Beat It',4,'4:18','https://open.spotify.com/embed/track/3BovdzfaX4jb5KFQwoPfAw?utm_source=generator','Just beat it'),(6,'Billie Jean',4,'4:54','https://open.spotify.com/embed/track/7J1uxwnxfQLu4APicE5Rnj?utm_source=generator','Billie Jean is not my lover'),(7,'Human Nature',4,'4:06','https://open.spotify.com/embed/track/4cgjA7B4fJBHyB9Ya2bu0t?utm_source=generator','If they say why why'),(8,'P.Y.T. (Pretty Young Thing)',4,'3:59','https://open.spotify.com/embed/track/1CgmY8fVN7kstVDZmsdM5k?utm_source=generator','Pretty young thing'),(9,'The Lady in My Life',4,'4:59','https://open.spotify.com/embed/track/07L1pzoVerhRSSaDGZHrKy?utm_source=generator','She is the one');
 /*!40000 ALTER TABLE `chansons` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -91,7 +91,7 @@ CREATE TABLE `notes_chansons` (
   UNIQUE KEY `unique_user_chanson` (`user_id`,`chanson_id`),
   KEY `chanson_id` (`chanson_id`),
   CONSTRAINT `notes_chansons_ibfk_1` FOREIGN KEY (`chanson_id`) REFERENCES `chansons` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,7 +100,7 @@ CREATE TABLE `notes_chansons` (
 
 LOCK TABLES `notes_chansons` WRITE;
 /*!40000 ALTER TABLE `notes_chansons` DISABLE KEYS */;
-INSERT INTO `notes_chansons` VALUES (1,1,2,3),(2,2,2,4),(3,3,2,2),(4,8,1,4),(5,8,2,4),(6,4,5,5),(7,3,5,4),(8,2,5,4),(9,1,5,4),(12,5,5,5),(13,6,5,5),(14,7,5,5),(15,8,5,5),(16,9,5,4);
+INSERT INTO `notes_chansons` VALUES (1,1,2,3),(2,2,2,4),(3,3,2,2),(4,8,1,4),(5,8,2,4),(6,4,5,5),(7,3,5,4),(8,2,5,4),(9,1,5,4),(12,5,5,5),(13,6,5,5),(14,7,5,5),(15,8,5,5),(16,9,5,4),(22,1,6,4),(23,2,6,4),(28,3,6,4),(30,4,6,5),(31,5,6,5),(32,6,6,5),(33,7,6,5),(34,8,6,5),(35,9,6,4);
 /*!40000 ALTER TABLE `notes_chansons` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -175,4 +175,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-12-04 23:49:01
+-- Dump completed on 2025-12-05  1:19:39
