@@ -418,7 +418,8 @@ export default {
 
 .album-card .cover,
 .chanson-card .cover {
-  width: 100%;
+  width: 154px;
+  height: 154px;  
   aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 4px;

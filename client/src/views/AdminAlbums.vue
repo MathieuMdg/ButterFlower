@@ -467,6 +467,7 @@ export default {
    ═══════════════════════════════════════════════════════════ */
 .action-btn {
   padding: 0.4em 0.8em;
+  margin: 2em 0;
   font-size: 0.85em;
   font-weight: 500;
   border: none;
