@@ -28,7 +28,7 @@
           {{ $t('nav.adminalbums') }}
         </router-link>
 
-        <router-link to="/blindtest" class="nav-link">🎵 Blind Test</router-link>
+        <router-link to="/blindtest" class="nav-link">Blind Test</router-link>
       </div>
 
       <!-- Language switcher -->
