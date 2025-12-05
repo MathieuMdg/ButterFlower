@@ -148,13 +148,41 @@ export default {
       this.userHistoryName = username;
       this.showUserHistory = true;
       this.popupUserId = userId;
-      const rect = event.target.getBoundingClientRect();
-      this.popupPosition = {
+      
+      // Calculate popup position with screen awareness
+      this.popupPosition = this.calculatePopupPosition(event.target);
+    },
+
+    calculatePopupPosition(targetElement) {
+      const rect = targetElement.getBoundingClientRect();
+      const popupHeight = 400; // Approximate popup height
+      const gap = 8;
+      const viewportHeight = window.innerHeight;
+      
+      // Check if there's more space below
+      const spaceBelow = viewportHeight - (rect.bottom + gap);
+      const spaceAbove = rect.top - gap;
+      
+      let top;
+      
+      if (spaceBelow > popupHeight) {
+        // Position below
+        top = rect.bottom + gap;
+      } else if (spaceAbove > popupHeight) {
+        // Position above
+        top = rect.top - popupHeight - gap;
+      } else {
+        // Default
+        top = rect.bottom + gap;
+      }
+      
+      return {
         position: 'fixed',
-        top: rect.bottom + 8 + 'px',
+        top: top + 'px',
         left: rect.left + 'px'
       };
     },
+
     closeUserHistory() {
       this.showUserHistory = false;
       this.popupUserId = null;
@@ -248,7 +276,7 @@ export default {
 }
 
 .admin-table th {
-  text-align: left;
+  text-align: center;
   padding: 1em 1.2em;
   font-size: 0.8em;
   font-weight: 600;
@@ -374,7 +402,7 @@ export default {
   color: var(--text-main);
   min-width: 340px;
   max-width: 400px;
-  max-height: 60vh;
+  max-height: 100vh;
   overflow-y: auto;
   padding: 1.2em;
   border-radius: 8px;

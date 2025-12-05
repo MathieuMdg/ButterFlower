@@ -58,8 +58,6 @@
                 :src="`https://widget.deezer.com/widget/dark/track/${chanson.deezer_id}`"
                 width="100%"
                 height="150"
-                frameborder="0"
-                allowtransparency="true"
                 allow="encrypted-media; clipboard-write">
               </iframe>
 
@@ -1177,13 +1175,9 @@ export default {
    IFRAME PLAYER - YouTube style
    ═══════════════════════════════════════════════════════════ */
 .iframe-player {
-  margin-top: 1.5em;
-  padding: 1em;
   background: var(--bg-card);
   border-radius: 8px;
   border: 1px solid var(--border-subtle);
-  max-width: 100%;
-  width: 100%;
 }
 
 .song-iframe {
@@ -1191,8 +1185,6 @@ export default {
   border-radius: 6px;
   margin-top: 0.8em;
   aspect-ratio: 16 / 9;
-  width: 100%;
-  height: auto;
 }
 
 @media (max-width: 768px) {
@@ -1218,20 +1210,7 @@ export default {
   grid-column: 1 / -1;
   margin-top: 1em;
   margin-bottom: 1.5em;
-  padding: 1em;
-  background: var(--bg-card);
-  border-radius: 8px;
-  border: 1px solid var(--border-subtle);
-  width: 100%;
   animation: slideDown 0.3s ease;
-}
-
-.song-iframe {
-  border: none;
-  border-radius: 6px;
-  aspect-ratio: 16 / 9;
-  width: 100%;
-  height: auto;
 }
 
 @media (max-width: 768px) {
