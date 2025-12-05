@@ -50,20 +50,23 @@
               </div>
             </div>
 
-            <!-- IFrame Player - RIGHT UNDER CLICKED SONG -->
-            <div v-if="currentPlaying === index && chanson.url_audio" class="iframe-player-inline">
+            <div v-if="currentPlaying === index" class="iframe-player-inline">
+              <!-- Cas 1: On a un ID Deezer (Idéal) -->
               <iframe
-                :key="currentPlaying"
-                :src="getAutoplayUrl(chanson.url_audio)"
-                :title="chanson.titre || 'Song Title'"
+                v-if="chanson.deezer_id"
+                title="deezer-widget"
+                :src="`https://widget.deezer.com/widget/dark/track/${chanson.deezer_id}`"
                 width="100%"
-                height="152"
-                style="border-radius:12px"
-                allowfullscreen
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                loading="lazy"
-                class="song-iframe"
-              ></iframe>
+                height="150"
+                frameborder="0"
+                allowtransparency="true"
+                allow="encrypted-media; clipboard-write">
+              </iframe>
+
+              <!-- Cas 2: Pas de Deezer ID -->
+              <div v-else class="no-track-msg">
+                <p>Lecteur non disponible pour ce titre.</p>
+              </div>
             </div>
           </div>
           
@@ -251,30 +254,6 @@ export default {
   methods: {
     selectChanson(index) {
       this.currentPlaying = this.currentPlaying === index ? null : index;
-    },
-
-    getAutoplayUrl(url) {
-      if (!url) return '';
-      
-      // Handle Spotify embed URLs
-      if (url.includes('spotify.com/embed/')) {
-        // Already an embed URL, just ensure it has autoplay
-        return url.includes('?') ? url : url + '?utm_source=generator';
-      }
-      
-      // Convert Spotify track URLs to embed format
-      if (url.includes('spotify.com/track/')) {
-        const trackId = url.split('track/')[1].split('?')[0];
-        return `https://open.spotify.com/embed/track/${trackId}?utm_source=generator`;
-      }
-      
-      // Handle YouTube (fallback)
-      if (url.includes('youtube.com/embed/')) {
-        const separator = url.includes('?') ? '&' : '?';
-        return `${url}${separator}autoplay=1&mute=0`;
-      }
-      
-      return url;
     },
 
     async noteChanson(chansonId, note) {
@@ -1266,4 +1245,14 @@ export default {
     height: 150px;
   }
 }
+
+.no-track-msg {
+  padding: 20px;
+  text-align: center;
+  color: var(--text-muted);
+  font-style: italic;
+  background: var(--bg-dark);
+  border-radius: 6px;
+}
+
 </style>

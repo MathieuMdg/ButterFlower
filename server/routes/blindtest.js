@@ -8,7 +8,7 @@ router.get('/questions', (req, res) => {
     SELECT 
       c.id,
       c.titre,
-      c.url_audio,
+      c.deezer_preview_url, -- On récupère la nouvelle colonne Deezer
       c.paroles,
       a.id AS album_id,
       a.title AS album_title,
@@ -18,7 +18,8 @@ router.get('/questions', (req, res) => {
       a.genre
     FROM chansons c
     JOIN albums a ON c.album_id = a.id
-    WHERE c.url_audio IS NOT NULL AND c.url_audio != ''
+    -- On s'assure d'avoir un extrait Deezer valide pour le jeu
+    WHERE c.deezer_preview_url IS NOT NULL AND c.deezer_preview_url != ''
     ORDER BY RAND()
     LIMIT 10
   `;
@@ -30,18 +31,22 @@ router.get('/questions', (req, res) => {
     }
 
     if (chansons.length === 0) {
-      return res.status(404).json({ error: 'Pas assez de chansons disponibles pour le blind test' });
+      return res.status(404).json({ error: 'Pas assez de chansons disponibles (avec extraits Deezer) pour le blind test' });
     }
 
     // Formater les questions avec alternance aléatoire audio/paroles
     const questions = chansons.map(chanson => {
       // Décider aléatoirement : true = audio, false = paroles
-      const showAudio = Math.random() < 0.5;
+      // Si pas de paroles, on force l'audio. Si pas d'audio (impossible via WHERE), on force paroles.
+      let showAudio = Math.random() < 0.5;
       
+      if (!chanson.paroles) showAudio = true; // Si pas de paroles, forcément audio
+
       return {
         id: chanson.id,
         hintType: showAudio ? 'audio' : 'lyrics',
-        audioUrl: showAudio ? chanson.url_audio : null,
+        // C'est ICI le changement important : on envoie l'URL Deezer au front
+        audioUrl: showAudio ? chanson.deezer_preview_url : null,
         paroles: !showAudio ? chanson.paroles : null,
         reponses: {
           chanson: chanson.titre,
@@ -61,7 +66,7 @@ router.get('/questions', (req, res) => {
   });
 });
 
-// GET /blindtest/suggestions - Pour l'autocomplétion
+// GET /blindtest/suggestions - Pour l'autocomplétion (PAS DE CHANGEMENT ICI)
 router.get('/suggestions', (req, res) => {
   // Récupérer tous les titres de chansons
   db.query('SELECT DISTINCT titre FROM chansons', (err1, chansons) => {
