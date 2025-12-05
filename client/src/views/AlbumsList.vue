@@ -391,63 +391,70 @@ export default {
    ═══════════════════════════════════════════════════════════ */
 .albums-scroll {
   display: flex;
-  gap: 1.1em;
+  gap: 1.5em; /* Espace augmenté pour aérer */
   overflow-x: auto;
-  padding: 0.5em 0.2em 1em 0.2em;
+  padding: 1em 0.5em 2em 0.5em; /* Padding pour laisser place à l'ombre et au hover */
   scroll-behavior: smooth;
 }
 
 /* ═══════════════════════════════════════════════════════════
-   ALBUM & CHANSON CARDS
+   ALBUM & CHANSON CARDS (CORRIGÉ)
    ═══════════════════════════════════════════════════════════ */
 .album-card,
 .chanson-card {
-  flex: 0 0 154px;
+  /* FIX: Taille fixe unifiée */
+  flex: 0 0 160px; 
+  width: 160px; 
   background: transparent;
   border-radius: 4px;
   text-align: left;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  /* EFFET: Transition fluide sur tout le bloc */
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); 
   position: relative;
 }
 
+/* EFFET: Le bloc entier monte un peu */
 .album-card:hover,
 .chanson-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-8px);
 }
 
 .album-card .cover,
 .chanson-card .cover {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  /* FIX: Force le ratio carré parfait */
+  aspect-ratio: 1 / 1; 
   object-fit: cover;
-  border-radius: 4px;
-  box-shadow: 0 4px 20px var(--shadow-card);
-  border: 2px solid transparent;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 8px; /* Un peu plus arrondi */
+  box-shadow: 0 4px 15px var(--shadow-card);
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
 }
 
+/* EFFET: L'image brille au survol */
 .album-card:hover .cover,
 .chanson-card:hover .cover {
   border-color: var(--accent-violet);
-  box-shadow: 0 8px 30px var(--shadow-glow);
+  box-shadow: 0 12px 40px var(--shadow-glow);
 }
 
 .album-card h3,
 .chanson-card h3 {
-  font-size: 0.9em;
-  font-weight: 500;
+  font-size: 0.95em;
+  font-weight: 600;
   color: var(--text-main);
-  margin: 0.7em 0 0.15em 0;
+  margin: 0.8em 0 0.2em 0;
+  /* FIX: Coupe proprement le texte trop long */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  line-height: 1.3;
+  line-height: 1.2;
 }
 
 .album-card p,
 .chanson-card p {
-  font-size: 0.8em;
+  font-size: 0.85em;
   color: var(--text-muted);
   margin: 0;
   white-space: nowrap;
@@ -459,15 +466,15 @@ export default {
 .album-rating {
   color: var(--accent-green) !important;
   font-weight: 600;
-  font-size: 0.82em !important;
-  margin-top: 0.25em !important;
+  font-size: 0.85em !important;
+  margin-top: 0.3em !important;
 }
 
 .chanson-album {
   font-size: 0.75em !important;
   color: var(--text-dim) !important;
   font-style: normal;
-  margin-top: 0.2em !important;
+  margin-top: 0.3em !important;
 }
 
 .no-data {
@@ -475,10 +482,11 @@ export default {
   font-style: italic;
   padding: 2em;
   font-size: 0.95em;
+  white-space: nowrap;
 }
 
 /* ═══════════════════════════════════════════════════════════
-   USER PROFILE BAR
+   USER PROFILE BAR (Reste inchangé)
    ═══════════════════════════════════════════════════════════ */
 .user-profile-bar {
   position: fixed;
@@ -515,23 +523,9 @@ export default {
   font-weight: 500;
   margin-top: 0.4em;
   text-align: center;
-}
-
-.logout-btn {
-  background: none;
-  border: none;
-  color: var(--text-dim);
-  font-size: 1em;
-  cursor: pointer;
-  margin-top: 0.3em;
-  padding: 0.2em;
+  background: rgba(20, 17, 31, 0.8); /* Petit fond pour lisibilité */
+  padding: 2px 6px;
   border-radius: 4px;
-  transition: color 0.15s, background 0.15s;
-}
-
-.logout-btn:hover {
-  color: #ff6b6b;
-  background: rgba(255, 107, 107, 0.1);
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -555,14 +549,8 @@ export default {
 }
 
 @keyframes dropdownFade {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
+  from { opacity: 0; transform: translateX(-50%) translateY(-8px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
 .profile-menu-history,
@@ -707,9 +695,14 @@ export default {
     padding: 70px 3% 2em 3%;
   }
 
+  .albums-scroll {
+    gap: 1em;
+  }
+
   .album-card,
   .chanson-card {
-    flex: 0 0 120px;
+    flex: 0 0 130px;
+    width: 130px;
   }
 
   .row-title {
@@ -735,12 +728,13 @@ export default {
 
   .album-card,
   .chanson-card {
-    flex: 0 0 100px;
+    flex: 0 0 110px;
+    width: 110px;
   }
 
   .album-card h3,
   .chanson-card h3 {
-    font-size: 0.8em;
+    font-size: 0.85em;
   }
 }
 </style>
