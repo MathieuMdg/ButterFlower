@@ -9,7 +9,7 @@ router.get('/questions', (req, res) => {
     SELECT 
       c.id,
       c.titre,
-      c.deezer_preview_url, -- On récupère la nouvelle colonne Deezer
+      c.deezer_preview_url,
       c.paroles,
       a.id AS album_id,
       a.title AS album_title,
@@ -19,7 +19,6 @@ router.get('/questions', (req, res) => {
       a.genre
     FROM chansons c
     JOIN albums a ON c.album_id = a.id
-    -- On s'assure d'avoir un extrait Deezer valide pour le jeu
     WHERE c.deezer_preview_url IS NOT NULL AND c.deezer_preview_url != ''
     ORDER BY RAND()
     LIMIT 10
@@ -32,7 +31,7 @@ router.get('/questions', (req, res) => {
     }
 
     if (chansons.length === 0) {
-      return res.status(404).json({ error: 'Pas assez de chansons disponibles (avec extraits Deezer) pour le blind test' });
+      return res.status(404).json({ error: 'Pas assez de chansons disponibles pour le blind test' });
     }
 
     // Formater les questions avec alternance aléatoire audio/paroles
@@ -43,7 +42,7 @@ router.get('/questions', (req, res) => {
       return {
         id: chanson.id,
         hintType: showAudio ? 'audio' : 'lyrics',
-        // CHANGEMENT : envoyer l'URL du proxy backend au lieu de l'URL Deezer directe
+        // CHANGEMENT : utiliser la route proxy au lieu de l'URL directe Deezer
         audioUrl: showAudio ? `/api/blindtest/audio-proxy/${chanson.id}` : null,
         paroles: !showAudio ? chanson.paroles : null,
         reponses: {
@@ -60,28 +59,24 @@ router.get('/questions', (req, res) => {
       };
     });
 
-
     res.json(questions);
   });
 });
 
-// GET /blindtest/suggestions - Pour l'autocomplétion (PAS DE CHANGEMENT ICI)
+// GET /blindtest/suggestions - Pour l'autocomplétion
 router.get('/suggestions', (req, res) => {
-  // Récupérer tous les titres de chansons
   db.query('SELECT DISTINCT titre FROM chansons', (err1, chansons) => {
     if (err1) {
       console.error('Erreur suggestions:', err1);
       return res.status(500).json({ error: 'Erreur serveur' });
     }
 
-    // Récupérer tous les artistes
     db.query('SELECT DISTINCT artist FROM albums', (err2, artistes) => {
       if (err2) {
         console.error('Erreur suggestions:', err2);
         return res.status(500).json({ error: 'Erreur serveur' });
       }
 
-      // Récupérer tous les albums
       db.query('SELECT DISTINCT title FROM albums', (err3, albums) => {
         if (err3) {
           console.error('Erreur suggestions:', err3);
@@ -98,7 +93,7 @@ router.get('/suggestions', (req, res) => {
   });
 });
 
-// Route proxy pour contourner les restrictions CORS de Deezer
+// NOUVELLE ROUTE : Proxy audio pour contourner les restrictions CORS de Deezer
 router.get('/audio-proxy/:trackId', async (req, res) => {
   const { trackId } = req.params;
   
@@ -108,28 +103,36 @@ router.get('/audio-proxy/:trackId', async (req, res) => {
       'SELECT deezer_preview_url FROM chansons WHERE id = ?', 
       [trackId], 
       async (err, results) => {
-        if (err || results.length === 0) {
+        if (err) {
+          console.error('Database error:', err);
+          return res.status(500).json({ error: 'Database error' });
+        }
+        
+        if (results.length === 0) {
+          console.log(`Track ${trackId} not found`);
           return res.status(404).json({ error: 'Track not found' });
         }
 
         const previewUrl = results[0].deezer_preview_url;
         
         if (!previewUrl) {
+          console.log(`No preview URL for track ${trackId}`);
           return res.status(404).json({ error: 'No preview URL' });
         }
 
+        console.log(`Proxying audio for track ${trackId}: ${previewUrl}`);
+
         // Fetch depuis Deezer et pipe vers le client
-        const axios = require('axios');
         const audioResponse = await axios({
           method: 'get',
           url: previewUrl,
-          responseType: 'stream'
+          responseType: 'stream',
+          timeout: 10000
         });
 
         // Copier les headers importants
         res.set({
           'Content-Type': audioResponse.headers['content-type'] || 'audio/mpeg',
-          'Content-Length': audioResponse.headers['content-length'],
           'Accept-Ranges': 'bytes',
           'Cache-Control': 'public, max-age=3600'
         });
@@ -139,7 +142,7 @@ router.get('/audio-proxy/:trackId', async (req, res) => {
       }
     );
   } catch (error) {
-    console.error('Proxy audio error:', error);
+    console.error('Proxy audio error:', error.message);
     res.status(500).json({ error: 'Failed to fetch audio' });
   }
 });
