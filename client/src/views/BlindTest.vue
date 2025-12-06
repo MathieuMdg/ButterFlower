@@ -268,7 +268,10 @@ export default {
       try {
         // Charger les questions
         const questionsRes = await api.get('/blindtest/questions');
-        this.questions = questionsRes.data;
+        this.questions = questionsRes.data.map(q => ({
+          ...q,
+          audioUrl: q.audioUrl ? `http://localhost:3000${q.audioUrl}` : null
+        }));
 
         // Charger les suggestions pour l'autocomplétion
         const suggestionsRes = await api.get('/blindtest/suggestions');
