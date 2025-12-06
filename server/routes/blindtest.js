@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
+const axios = require('axios');
 
 // GET /blindtest/questions - Récupère 10 questions aléatoires
 router.get('/questions', (req, res) => {
@@ -36,17 +37,14 @@ router.get('/questions', (req, res) => {
 
     // Formater les questions avec alternance aléatoire audio/paroles
     const questions = chansons.map(chanson => {
-      // Décider aléatoirement : true = audio, false = paroles
-      // Si pas de paroles, on force l'audio. Si pas d'audio (impossible via WHERE), on force paroles.
       let showAudio = Math.random() < 0.5;
-      
-      if (!chanson.paroles) showAudio = true; // Si pas de paroles, forcément audio
+      if (!chanson.paroles) showAudio = true;
 
       return {
         id: chanson.id,
         hintType: showAudio ? 'audio' : 'lyrics',
-        // C'est ICI le changement important : on envoie l'URL Deezer au front
-        audioUrl: showAudio ? chanson.deezer_preview_url : null,
+        // CHANGEMENT : envoyer l'URL du proxy backend au lieu de l'URL Deezer directe
+        audioUrl: showAudio ? `/api/blindtest/audio-proxy/${chanson.id}` : null,
         paroles: !showAudio ? chanson.paroles : null,
         reponses: {
           chanson: chanson.titre,
@@ -61,6 +59,7 @@ router.get('/questions', (req, res) => {
         }
       };
     });
+
 
     res.json(questions);
   });
@@ -97,6 +96,52 @@ router.get('/suggestions', (req, res) => {
       });
     });
   });
+});
+
+// Route proxy pour contourner les restrictions CORS de Deezer
+router.get('/audio-proxy/:trackId', async (req, res) => {
+  const { trackId } = req.params;
+  
+  try {
+    // Récupérer l'URL de preview depuis la base de données
+    db.query(
+      'SELECT deezer_preview_url FROM chansons WHERE id = ?', 
+      [trackId], 
+      async (err, results) => {
+        if (err || results.length === 0) {
+          return res.status(404).json({ error: 'Track not found' });
+        }
+
+        const previewUrl = results[0].deezer_preview_url;
+        
+        if (!previewUrl) {
+          return res.status(404).json({ error: 'No preview URL' });
+        }
+
+        // Fetch depuis Deezer et pipe vers le client
+        const axios = require('axios');
+        const audioResponse = await axios({
+          method: 'get',
+          url: previewUrl,
+          responseType: 'stream'
+        });
+
+        // Copier les headers importants
+        res.set({
+          'Content-Type': audioResponse.headers['content-type'] || 'audio/mpeg',
+          'Content-Length': audioResponse.headers['content-length'],
+          'Accept-Ranges': 'bytes',
+          'Cache-Control': 'public, max-age=3600'
+        });
+
+        // Pipe le stream audio vers la réponse
+        audioResponse.data.pipe(res);
+      }
+    );
+  } catch (error) {
+    console.error('Proxy audio error:', error);
+    res.status(500).json({ error: 'Failed to fetch audio' });
+  }
 });
 
 module.exports = router;
