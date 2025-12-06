@@ -395,6 +395,50 @@ export default {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .admin-page {
+    padding: 1.5em 1em;
+  }
+  .admin-table th,
+  .admin-table td {
+    padding: 0.7em;
+    font-size: 0.85em;
+  }
+  .actions-cell {
+    flex-direction: column;
+    gap: 0.3em;
+  }
+  .action-btn {
+    padding: 0.3em 0.6em;
+    font-size: 0.8em;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-title {
+    font-size: 1.2em;
+  }
+  /* Cacher colonnes Email et Role sur mobile */
+  .admin-table th:nth-child(3),
+  .admin-table td:nth-child(3),
+  .admin-table th:nth-child(4),
+  .admin-table td:nth-child(4) {
+    display: none;
+  }
+}
+
+@media (max-width: 400px) {
+  /* Cacher aussi Created At sur très petits écrans */
+  .admin-table th:nth-child(5),
+  .admin-table td:nth-child(5) {
+    display: none;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════
    USER HISTORY POPUP
    ═══════════════════════════════════════════════════════════ */
 .user-history-popup {

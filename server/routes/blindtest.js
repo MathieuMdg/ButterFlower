@@ -109,29 +109,23 @@ router.get('/audio-proxy/:trackId', async (req, res) => {
         }
         
         if (results.length === 0) {
-          console.log(`Track ${trackId} not found`);
           return res.status(404).json({ error: 'Track not found' });
         }
 
         const deezerId = results[0].deezer_id;
         
         if (!deezerId) {
-          console.log(`No Deezer ID for track ${trackId}`);
           return res.status(404).json({ error: 'No Deezer ID' });
         }
 
         try {
           // Récupérer l'URL fraîche depuis l'API Deezer
-          console.log(`Fetching fresh preview URL for Deezer track ${deezerId}`);
           const deezerResponse = await axios.get(`https://api.deezer.com/track/${deezerId}`);
           const previewUrl = deezerResponse.data.preview;
 
           if (!previewUrl) {
-            console.log(`No preview URL available for Deezer track ${deezerId}`);
             return res.status(404).json({ error: 'No preview available' });
           }
-
-          console.log(`Proxying fresh audio: ${previewUrl}`);
 
           // Fetch l'audio depuis Deezer et pipe vers le client
           const audioResponse = await axios({

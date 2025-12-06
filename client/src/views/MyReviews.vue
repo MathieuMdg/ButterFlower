@@ -38,3 +38,37 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .review-item {
+    padding: 1em;
+  }
+  .review-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5em;
+  }
+  .review-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  h2 {
+    font-size: 1.3em;
+  }
+  .review-album-title {
+    font-size: 1em;
+  }
+  .review-text {
+    font-size: 0.9em;
+  }
+}
+
+</style>

@@ -415,19 +415,38 @@ export default {
 </script>
 
 <style scoped>
+/* ═══════════════════════════════════════════════════════════
+   VARIABLES (harmonisées avec AlbumsList)
+   ═══════════════════════════════════════════════════════════ */
 .blindtest-page {
+  --bg-dark: #14111f;
+  --bg-card: #1c1928;
+  --bg-card-hover: #252136;
+  --accent-violet: #802BB1;
+  --accent-violet-light: #9b4dca;
+  --accent-green: #00c030;
+  --text-main: #e1e3e6;
+  --text-muted: #9a9bab;
+  --text-dim: #6b6c7a;
+  --border-subtle: #2a2740;
+  --shadow-card: rgba(0, 0, 0, 0.4);
+  --shadow-glow: rgba(128, 43, 177, 0.25);
+  
   min-height: 100vh;
-  background: #14111f;
-  color: #e1e3e6;
-  padding: 20px;
+  background: var(--bg-dark);
+  color: var(--text-main);
+  padding: 80px 4% 3em 4%;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-/* ÉCRAN D'ACCUEIL */
+/* ═══════════════════════════════════════════════════════════
+   ÉCRAN D'ACCUEIL
+   ═══════════════════════════════════════════════════════════ */
 .start-screen {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 40px);
+  min-height: calc(100vh - 160px);
 }
 
 .start-content {
@@ -438,24 +457,26 @@ export default {
 .start-content h1 {
   font-size: 3.5rem;
   margin-bottom: 20px;
-  color: #802BB1;
+  color: var(--accent-violet);
+  font-weight: 800;
 }
 
 .description {
   font-size: 1.2rem;
-  color: #9a9bab;
+  color: var(--text-muted);
   margin-bottom: 40px;
   line-height: 1.6;
 }
 
 .rules {
-  background: #1c1928;
+  background: var(--bg-card);
   border-radius: 12px;
   padding: 30px;
   margin-bottom: 40px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  border: 1px solid var(--border-subtle);
 }
 
 .rule {
@@ -466,7 +487,7 @@ export default {
 }
 
 .points {
-  background: #802BB1;
+  background: var(--accent-violet);
   color: white;
   width: 45px;
   height: 45px;
@@ -476,23 +497,25 @@ export default {
   justify-content: center;
   font-weight: bold;
   font-size: 1.2rem;
+  flex-shrink: 0;
 }
 
 .btn-start {
-  background: #802BB1;
+  background: var(--accent-violet);
   color: white;
   border: none;
   padding: 18px 40px;
   font-size: 1.2rem;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
   font-weight: bold;
 }
 
 .btn-start:hover:not(:disabled) {
-  background: #9a3dd1;
+  background: var(--accent-violet-light);
   transform: translateY(-2px);
+  box-shadow: 0 8px 20px var(--shadow-glow);
 }
 
 .btn-start:disabled {
@@ -500,7 +523,9 @@ export default {
   cursor: not-allowed;
 }
 
-/* ÉCRAN DE JEU */
+/* ═══════════════════════════════════════════════════════════
+   ÉCRAN DE JEU
+   ═══════════════════════════════════════════════════════════ */
 .game-screen {
   max-width: 900px;
   margin: 0 auto;
@@ -519,28 +544,31 @@ export default {
 }
 
 .question-number {
-  color: #e1e3e6;
+  color: var(--text-main);
 }
 
 .current-score {
-  color: #802BB1;
+  color: var(--accent-violet);
   font-weight: bold;
 }
 
 .progress-bar {
   height: 8px;
-  background: #1c1928;
+  background: var(--bg-card);
   border-radius: 10px;
   overflow: hidden;
+  border: 1px solid var(--border-subtle);
 }
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #802BB1, #9a3dd1);
+  background: linear-gradient(90deg, var(--accent-violet), var(--accent-violet-light));
   transition: width 0.5s ease;
 }
 
-/* QUESTION */
+/* ═══════════════════════════════════════════════════════════
+   SECTION QUESTION
+   ═══════════════════════════════════════════════════════════ */
 .question-content {
   display: flex;
   flex-direction: column;
@@ -554,18 +582,25 @@ export default {
 }
 
 .hint-card {
-  background: #1c1928;
+  background: var(--bg-card);
   border-radius: 12px;
   padding: 25px;
   flex: 1;
-  max-width: 600px; /* Limite la largeur quand il y a un seul élément */
+  max-width: 600px;
+  border: 1px solid var(--border-subtle);
+  transition: all 0.3s ease;
 }
 
+.hint-card:hover {
+  border-color: var(--accent-violet);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+}
 
 .hint-card h3 {
   margin-bottom: 20px;
-  color: #802BB1;
+  color: var(--accent-violet);
   font-size: 1.2rem;
+  font-weight: 600;
 }
 
 /* Lecteur audio */
@@ -576,7 +611,7 @@ export default {
 }
 
 .btn-play {
-  background: #802BB1;
+  background: var(--accent-violet);
   color: white;
   border: none;
   width: 60px;
@@ -584,52 +619,59 @@ export default {
   border-radius: 50%;
   font-size: 1.5rem;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
   margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-play:hover {
-  background: #9a3dd1;
+  background: var(--accent-violet-light);
   transform: scale(1.1);
+  box-shadow: 0 4px 15px var(--shadow-glow);
 }
 
 .audio-progress {
   height: 6px;
-  background: #14111f;
+  background: var(--bg-dark);
   border-radius: 10px;
   overflow: hidden;
 }
 
 .audio-bar {
   height: 100%;
-  background: #802BB1;
+  background: var(--accent-violet);
   transition: width 0.1s linear;
 }
 
 .audio-time {
   text-align: center;
-  color: #9a9bab;
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
 /* Paroles */
 .lyrics-text {
   font-style: italic;
-  color: #e1e3e6;
+  color: var(--text-main);
   font-size: 1.1rem;
   line-height: 1.8;
   text-align: center;
   padding: 20px;
 }
 
-/* Formulaire */
+/* ═══════════════════════════════════════════════════════════
+   FORMULAIRE DE RÉPONSE
+   ═══════════════════════════════════════════════════════════ */
 .answer-form {
-  background: #1c1928;
+  background: var(--bg-card);
   border-radius: 12px;
   padding: 30px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  border: 1px solid var(--border-subtle);
 }
 
 .input-group {
@@ -639,24 +681,26 @@ export default {
 }
 
 .input-group label {
-  color: #9a9bab;
+  color: var(--text-muted);
   font-size: 0.95rem;
   font-weight: 500;
 }
 
 .input-group input {
-  background: #14111f;
-  border: 2px solid #2a2735;
-  color: #e1e3e6;
+  background: var(--bg-dark);
+  border: 2px solid var(--border-subtle);
+  color: var(--text-main);
   padding: 12px 16px;
   border-radius: 8px;
   font-size: 1rem;
-  transition: border-color 0.3s;
+  transition: all 0.3s ease;
+  font-family: inherit;
 }
 
 .input-group input:focus {
   outline: none;
-  border-color: #802BB1;
+  border-color: var(--accent-violet);
+  box-shadow: 0 0 0 3px var(--shadow-glow);
 }
 
 .input-group input:disabled {
@@ -665,24 +709,27 @@ export default {
 }
 
 .btn-validate {
-  background: #802BB1;
+  background: var(--accent-violet);
   color: white;
   border: none;
   padding: 14px 30px;
   font-size: 1.1rem;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
   font-weight: bold;
   margin-top: 10px;
 }
 
 .btn-validate:hover {
-  background: #9a3dd1;
+  background: var(--accent-violet-light);
   transform: translateY(-2px);
+  box-shadow: 0 8px 20px var(--shadow-glow);
 }
 
-/* RÉSULTAT */
+/* ═══════════════════════════════════════════════════════════
+   RÉSULTAT DE LA QUESTION
+   ═══════════════════════════════════════════════════════════ */
 .result-content {
   max-width: 700px;
   margin: 0 auto;
@@ -696,30 +743,38 @@ export default {
 .result-header h2 {
   font-size: 2.5rem;
   margin-bottom: 10px;
+  font-weight: 800;
 }
 
 .result-header h2.success {
-  color: #4caf50;
+  color: var(--accent-green);
 }
 
 .result-header h2.fail {
-  color: #9a9bab;
+  color: var(--text-muted);
 }
 
 .question-score {
   font-size: 1.5rem;
-  color: #802BB1;
+  color: var(--accent-violet);
   font-weight: bold;
 }
 
 .reveal-card {
-  background: #1c1928;
+  background: var(--bg-card);
   border-radius: 12px;
   padding: 30px;
   display: flex;
   gap: 25px;
   margin-bottom: 30px;
   align-items: center;
+  border: 1px solid var(--border-subtle);
+  transition: all 0.3s ease;
+}
+
+.reveal-card:hover {
+  border-color: var(--accent-violet);
+  box-shadow: 0 8px 25px var(--shadow-glow);
 }
 
 .album-cover {
@@ -728,6 +783,7 @@ export default {
   border-radius: 8px;
   object-fit: cover;
   flex-shrink: 0;
+  border: 1px solid var(--border-subtle);
 }
 
 .reveal-info {
@@ -737,38 +793,42 @@ export default {
 .song-title {
   font-size: 1.8rem;
   margin-bottom: 8px;
-  color: #e1e3e6;
+  color: var(--text-main);
+  font-weight: 700;
 }
 
 .artist-name {
   font-size: 1.3rem;
-  color: #802BB1;
+  color: var(--accent-violet);
   margin-bottom: 5px;
+  font-weight: 600;
 }
 
 .album-name {
-  color: #9a9bab;
+  color: var(--text-muted);
   font-size: 1.1rem;
   margin-bottom: 15px;
 }
 
 .genre-tag {
-  background: #2a2735;
-  color: #9a9bab;
+  background: var(--bg-dark);
+  color: var(--text-muted);
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 0.9rem;
   display: inline-block;
+  border: 1px solid var(--border-subtle);
 }
 
 .answers-review {
-  background: #1c1928;
+  background: var(--bg-card);
   border-radius: 12px;
   padding: 25px;
   margin-bottom: 30px;
   display: flex;
   flex-direction: column;
   gap: 15px;
+  border: 1px solid var(--border-subtle);
 }
 
 .answer-item {
@@ -777,27 +837,27 @@ export default {
   gap: 15px;
   padding: 12px 15px;
   border-radius: 8px;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
 }
 
 .answer-item.correct {
-  background: rgba(76, 175, 80, 0.1);
-  border-left: 4px solid #4caf50;
+  background: rgba(0, 192, 48, 0.1);
+  border-left: 4px solid var(--accent-green);
 }
 
 .answer-item.incorrect {
-  background: rgba(244, 67, 54, 0.1);
-  border-left: 4px solid #f44336;
+  background: rgba(231, 76, 60, 0.1);
+  border-left: 4px solid #e74c3c;
 }
 
 .answer-label {
-  color: #9a9bab;
+  color: var(--text-muted);
   font-weight: 500;
   min-width: 80px;
 }
 
 .your-answer {
-  color: #e1e3e6;
+  color: var(--text-main);
   flex: 1;
 }
 
@@ -807,37 +867,40 @@ export default {
 }
 
 .answer-item.correct .icon {
-  color: #4caf50;
+  color: var(--accent-green);
 }
 
 .answer-item.incorrect .icon {
-  color: #f44336;
+  color: #e74c3c;
 }
 
 .btn-next {
-  background: #802BB1;
+  background: var(--accent-violet);
   color: white;
   border: none;
   padding: 14px 30px;
   font-size: 1.1rem;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
   font-weight: bold;
   width: 100%;
 }
 
 .btn-next:hover {
-  background: #9a3dd1;
+  background: var(--accent-violet-light);
   transform: translateY(-2px);
+  box-shadow: 0 8px 20px var(--shadow-glow);
 }
 
-/* ÉCRAN DE FIN */
+/* ═══════════════════════════════════════════════════════════
+   ÉCRAN DE FIN
+   ═══════════════════════════════════════════════════════════ */
 .end-screen {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 40px);
+  min-height: calc(100vh - 160px);
 }
 
 .end-content {
@@ -849,7 +912,8 @@ export default {
 .end-content h1 {
   font-size: 3rem;
   margin-bottom: 40px;
-  color: #802BB1;
+  color: var(--accent-violet);
+  font-weight: 800;
 }
 
 .final-score {
@@ -865,13 +929,14 @@ export default {
   align-items: center;
   justify-content: center;
   margin: 0 auto;
-  border: 8px solid;
+    border: 8px solid;
   position: relative;
+  box-shadow: 0 10px 40px var(--shadow-card);
 }
 
 .score-circle.excellent {
-  border-color: #4caf50;
-  background: rgba(76, 175, 80, 0.1);
+  border-color: var(--accent-green);
+  background: rgba(0, 192, 48, 0.1);
 }
 
 .score-circle.good {
@@ -885,32 +950,33 @@ export default {
 }
 
 .score-circle.low {
-  border-color: #9a9bab;
+  border-color: var(--text-muted);
   background: rgba(154, 155, 171, 0.1);
 }
 
 .score-value {
   font-size: 4rem;
   font-weight: bold;
-  color: #e1e3e6;
+  color: var(--text-main);
   line-height: 1;
 }
 
 .score-max {
   font-size: 1.5rem;
-  color: #9a9bab;
+  color: var(--text-muted);
 }
 
 .score-message {
   margin-bottom: 40px;
   padding: 20px;
-  background: #1c1928;
+  background: var(--bg-card);
   border-radius: 12px;
+  border: 1px solid var(--border-subtle);
 }
 
 .score-message p {
   font-size: 1.3rem;
-  color: #e1e3e6;
+  color: var(--text-main);
   line-height: 1.6;
 }
 
@@ -922,23 +988,31 @@ export default {
 }
 
 .stat {
-  background: #1c1928;
+  background: var(--bg-card);
   border-radius: 12px;
   padding: 25px 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  border: 1px solid var(--border-subtle);
+  transition: all 0.3s ease;
+}
+
+.stat:hover {
+  border-color: var(--accent-violet);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  transform: translateY(-4px);
 }
 
 .stat-value {
   font-size: 2.5rem;
   font-weight: bold;
-  color: #802BB1;
+  color: var(--accent-violet);
 }
 
 .stat-label {
-  color: #9a9bab;
+  color: var(--text-muted);
   font-size: 0.95rem;
   text-align: center;
   line-height: 1.3;
@@ -957,54 +1031,58 @@ export default {
   font-size: 1.1rem;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
   font-weight: bold;
   text-decoration: none;
   display: inline-block;
 }
 
 .btn-restart {
-  background: #802BB1;
+  background: var(--accent-violet);
   color: white;
   border: none;
 }
 
 .btn-restart:hover {
-  background: #9a3dd1;
+  background: var(--accent-violet-light);
   transform: translateY(-2px);
+  box-shadow: 0 8px 20px var(--shadow-glow);
 }
 
 .btn-back {
-  background: #2a2735;
-  color: #e1e3e6;
-  border: 2px solid #3a3748;
+  background: var(--bg-card);
+  color: var(--text-main);
+  border: 2px solid var(--border-subtle);
 }
 
 .btn-back:hover {
-  background: #3a3748;
+  background: var(--bg-card-hover);
+  border-color: var(--accent-violet);
   transform: translateY(-2px);
 }
 
-/* RESPONSIVE */
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════ */
 @media (max-width: 900px) {
   .hints-section {
-    grid-template-columns: 1fr;
+    flex-direction: column;
   }
-
+  
   .reveal-card {
     flex-direction: column;
     text-align: center;
   }
-
+  
   .album-cover {
     width: 180px;
     height: 180px;
   }
-
+  
   .song-title {
     font-size: 1.5rem;
   }
-
+  
   .artist-name {
     font-size: 1.2rem;
   }
@@ -1012,179 +1090,179 @@ export default {
 
 @media (max-width: 600px) {
   .blindtest-page {
-    padding: 15px;
+    padding: 70px 3% 2em 3%;
   }
-
+  
   .start-content h1 {
     font-size: 2.5rem;
   }
-
+  
   .description {
     font-size: 1rem;
   }
-
+  
   .rules {
     padding: 20px;
   }
-
+  
   .rule {
     font-size: 1rem;
   }
-
+  
   .points {
     width: 40px;
     height: 40px;
     font-size: 1rem;
   }
-
+  
   .btn-start {
     padding: 15px 30px;
     font-size: 1rem;
   }
-
+  
   .game-header {
     margin-bottom: 20px;
   }
-
+  
   .progress-info {
     font-size: 1rem;
   }
-
+  
   .hint-card {
     padding: 20px;
   }
-
+  
   .hint-card h3 {
     font-size: 1.1rem;
     margin-bottom: 15px;
   }
-
+  
   .lyrics-text {
     font-size: 1rem;
     padding: 15px;
   }
-
+  
   .answer-form {
     padding: 20px;
   }
-
+  
   .input-group input {
     padding: 10px 14px;
   }
-
+  
   .btn-validate {
     padding: 12px 25px;
     font-size: 1rem;
   }
-
+  
   .result-header h2 {
     font-size: 2rem;
   }
-
+  
   .question-score {
     font-size: 1.3rem;
   }
-
+  
   .reveal-card {
     padding: 20px;
   }
-
+  
   .album-cover {
     width: 120px;
     height: 120px;
   }
-
+  
   .song-title {
     font-size: 1.3rem;
   }
-
+  
   .artist-name {
     font-size: 1rem;
   }
-
+  
   .album-name {
     font-size: 0.95rem;
   }
-
+  
   .answers-review {
     padding: 15px;
     gap: 10px;
   }
-
+  
   .answer-item {
     padding: 10px 12px;
     gap: 10px;
   }
-
+  
   .answer-label {
     min-width: 70px;
     font-size: 0.9rem;
   }
-
+  
   .your-answer {
     font-size: 0.9rem;
   }
-
+  
   .icon {
     font-size: 1.2rem;
   }
-
+  
   .btn-next {
     padding: 12px 25px;
     font-size: 1rem;
   }
-
+  
   .end-content h1 {
     font-size: 2.2rem;
     margin-bottom: 30px;
   }
-
+  
   .score-circle {
     width: 160px;
     height: 160px;
     border-width: 6px;
   }
-
+  
   .score-value {
     font-size: 3rem;
   }
-
+  
   .score-max {
     font-size: 1.2rem;
   }
-
+  
   .score-message {
     padding: 15px;
     margin-bottom: 30px;
   }
-
+  
   .score-message p {
     font-size: 1.1rem;
   }
-
+  
   .stats {
     grid-template-columns: 1fr;
     gap: 15px;
     margin-bottom: 30px;
   }
-
+  
   .stat {
     padding: 20px 15px;
   }
-
+  
   .stat-value {
     font-size: 2rem;
   }
-
+  
   .stat-label {
     font-size: 0.9rem;
   }
-
+  
   .end-actions {
     flex-direction: column;
     gap: 12px;
   }
-
+  
   .btn-restart,
   .btn-back {
     width: 100%;
@@ -1195,56 +1273,56 @@ export default {
 
 @media (max-width: 400px) {
   .blindtest-page {
-    padding: 10px;
+    padding: 60px 4% 2em 4%;
   }
-
+  
   .start-content h1 {
     font-size: 2rem;
   }
-
+  
   .rules {
     padding: 15px;
     gap: 15px;
   }
-
+  
   .hint-card {
     padding: 15px;
   }
-
+  
   .btn-play {
     width: 50px;
     height: 50px;
     font-size: 1.2rem;
   }
-
+  
   .answer-form {
     padding: 15px;
     gap: 15px;
   }
-
+  
   .reveal-card {
     padding: 15px;
     gap: 15px;
   }
-
+  
   .album-cover {
     width: 100px;
     height: 100px;
   }
-
+  
   .song-title {
     font-size: 1.1rem;
   }
-
+  
   .end-content h1 {
     font-size: 1.8rem;
   }
-
+  
   .score-circle {
     width: 140px;
     height: 140px;
   }
-
+  
   .score-value {
     font-size: 2.5rem;
   }
