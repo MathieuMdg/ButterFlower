@@ -93,14 +93,14 @@ router.get('/suggestions', (req, res) => {
   });
 });
 
-// NOUVELLE ROUTE : Proxy audio pour contourner les restrictions CORS de Deezer
+// ROUTE PROXY avec récupération fraîche de l'URL depuis l'API Deezer
 router.get('/audio-proxy/:trackId', async (req, res) => {
   const { trackId } = req.params;
   
   try {
-    // Récupérer l'URL de preview depuis la base de données
+    // Récupérer le deezer_id depuis la base de données
     db.query(
-      'SELECT deezer_preview_url FROM chansons WHERE id = ?', 
+      'SELECT deezer_id FROM chansons WHERE id = ?', 
       [trackId], 
       async (err, results) => {
         if (err) {
@@ -113,32 +113,48 @@ router.get('/audio-proxy/:trackId', async (req, res) => {
           return res.status(404).json({ error: 'Track not found' });
         }
 
-        const previewUrl = results[0].deezer_preview_url;
+        const deezerId = results[0].deezer_id;
         
-        if (!previewUrl) {
-          console.log(`No preview URL for track ${trackId}`);
-          return res.status(404).json({ error: 'No preview URL' });
+        if (!deezerId) {
+          console.log(`No Deezer ID for track ${trackId}`);
+          return res.status(404).json({ error: 'No Deezer ID' });
         }
 
-        console.log(`Proxying audio for track ${trackId}: ${previewUrl}`);
+        try {
+          // Récupérer l'URL fraîche depuis l'API Deezer
+          console.log(`Fetching fresh preview URL for Deezer track ${deezerId}`);
+          const deezerResponse = await axios.get(`https://api.deezer.com/track/${deezerId}`);
+          const previewUrl = deezerResponse.data.preview;
 
-        // Fetch depuis Deezer et pipe vers le client
-        const audioResponse = await axios({
-          method: 'get',
-          url: previewUrl,
-          responseType: 'stream',
-          timeout: 10000
-        });
+          if (!previewUrl) {
+            console.log(`No preview URL available for Deezer track ${deezerId}`);
+            return res.status(404).json({ error: 'No preview available' });
+          }
 
-        // Copier les headers importants
-        res.set({
-          'Content-Type': audioResponse.headers['content-type'] || 'audio/mpeg',
-          'Accept-Ranges': 'bytes',
-          'Cache-Control': 'public, max-age=3600'
-        });
+          console.log(`Proxying fresh audio: ${previewUrl}`);
 
-        // Pipe le stream audio vers la réponse
-        audioResponse.data.pipe(res);
+          // Fetch l'audio depuis Deezer et pipe vers le client
+          const audioResponse = await axios({
+            method: 'get',
+            url: previewUrl,
+            responseType: 'stream',
+            timeout: 10000
+          });
+
+          // Copier les headers importants
+          res.set({
+            'Content-Type': audioResponse.headers['content-type'] || 'audio/mpeg',
+            'Accept-Ranges': 'bytes',
+            'Cache-Control': 'public, max-age=300' // Cache 5 minutes seulement
+          });
+
+          // Pipe le stream audio vers la réponse
+          audioResponse.data.pipe(res);
+
+        } catch (deezerError) {
+          console.error(`Deezer API error for track ${deezerId}:`, deezerError.message);
+          return res.status(500).json({ error: 'Failed to fetch from Deezer' });
+        }
       }
     );
   } catch (error) {
