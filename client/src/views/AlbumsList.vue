@@ -61,6 +61,42 @@
       </div>
     </div>
 
+    <!-- Barre de recherche avec popup -->
+    <section class="search-section">
+      <div class="search-container">
+        <input
+          v-model="searchQuery"
+          type="text"
+          :placeholder="$t('albums.searchAlbums') || 'Rechercher un album...'"
+          class="search-input"
+          @focus="showSearchResults = true"
+          @input="handleSearch"
+        />
+        
+        <!-- Popup des résultats -->
+        <div v-if="showSearchResults && searchQuery.trim()" class="search-popup">
+          <div v-if="searchResults.length" class="search-results">
+            <div
+              v-for="album in searchResults"
+              :key="'search-' + album.id"
+              class="search-result-item"
+              @click="goToAlbumFromSearch(album.id)"
+            >
+              <img :src="album.cover_url" :alt="album.title" class="search-result-cover" />
+              <div class="search-result-info">
+                <div class="search-result-title">{{ album.title }}</div>
+                <div class="search-result-artist">{{ album.artist }}</div>
+                <div class="search-result-year">{{ album.release_year }}</div>
+              </div>
+            </div>
+          </div>
+          <div v-else class="search-no-results">
+            {{ $t('albums.noSearchResults') || 'Aucun album trouvé' }}
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Ligne 1 : Recommandés pour vous -->
     <section class="album-row">
       <h2 class="row-title">{{ $t('albums.recommendedForYou') }}</h2>
@@ -194,7 +230,10 @@ export default {
       userToken: localStorage.getItem('token') || '',
       menuOpen: false,
       historyOpen: false,
-      userReviews: []
+      userReviews: [],
+      searchQuery: '',   
+      showSearchResults: false,
+      searchResults: []
     };
   },
   computed: {
@@ -213,15 +252,32 @@ export default {
     profileImage() {
       return "https://ui-avatars.com/api/?background=802BB1&color=fff&name=" +
         encodeURIComponent(this.usernameDisplay);
+    },
+    allAlbumsForSearch() {
+      // Combine tous les albums disponibles pour la recherche
+      return [
+        ...this.albums,
+        ...this.recommendedAlbums,
+        ...this.topRatedAlbums,
+        ...this.recentAlbums,
+        ...this.userTopAlbums
+      ].filter((album, index, self) => 
+        // Supprime les doublons par ID
+        index === self.findIndex(a => a.id === album.id)
+      );
     }
   },
   mounted() {
     this.loadAllData();
     window.addEventListener('click', this.handleClickOutside);
+    document.addEventListener('click', this.handleSearchClickOutside);
   },
   beforeUnmount() {
     window.removeEventListener('click', this.handleClickOutside);
+    document.removeEventListener('click', this.handleSearchClickOutside);
   },
+  
+  
   methods: {
     async loadAllData() {
       try {
@@ -311,7 +367,33 @@ export default {
     redirectToLogin() {
       this.menuOpen = false;
       this.$router.push('/userlogin');
-    }
+    },
+    handleSearch() {
+      if (!this.searchQuery.trim()) {
+        this.searchResults = [];
+        return;
+      }
+      
+      const q = this.searchQuery.toLowerCase();
+      this.searchResults = this.allAlbumsForSearch
+        .filter(album => 
+          album.title.toLowerCase().includes(q) ||
+          album.artist.toLowerCase().includes(q)
+        )
+        .slice(0, 8); // Limite à 8 résultats max
+    },
+    goToAlbumFromSearch(albumId) {
+      this.searchQuery = '';
+      this.showSearchResults = false;
+      this.searchResults = [];
+      this.$router.push(`/albums/${albumId}`);
+    },
+    handleSearchClickOutside(e) {
+      const searchContainer = document.querySelector('.search-container');
+      if (searchContainer && !searchContainer.contains(e.target)) {
+        this.showSearchResults = false;
+      }
+    },
   }
 };
 </script>
@@ -572,6 +654,144 @@ export default {
 .profile-menu-login:hover {
   background: var(--accent-violet);
   color: #fff;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SEARCH SECTION & POPUP
+   ═══════════════════════════════════════════════════════════ */
+.search-section {
+  margin-bottom: 2em;
+  padding-top: 1em;
+}
+
+.search-container {
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.9em 1.2em;
+  background: var(--bg-card);
+  border: 2px solid var(--border-subtle);
+  border-radius: 8px;
+  color: var(--text-main);
+  font-size: 0.95em;
+  font-family: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-input::placeholder {
+  color: var(--text-dim);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--accent-violet);
+  box-shadow: 0 0 0 3px var(--shadow-glow);
+}
+
+/* Popup des résultats */
+.search-popup {
+  position: absolute;
+  top: calc(100% + 0.5em);
+  left: 0;
+  right: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 1000;
+  animation: searchPopupFade 0.2s ease;
+}
+
+@keyframes searchPopupFade {
+  from { 
+    opacity: 0; 
+    transform: translateY(-8px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+.search-results {
+  padding: 0.5em 0;
+}
+
+.search-result-item {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  padding: 0.8em 1em;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.search-result-item:hover {
+  background: var(--bg-card-hover);
+}
+
+.search-result-cover {
+  width: 50px;
+  height: 50px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.search-result-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.search-result-title {
+  font-size: 0.95em;
+  font-weight: 600;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-result-artist {
+  font-size: 0.85em;
+  color: var(--text-muted);
+  margin-top: 0.2em;
+}
+
+.search-result-year {
+  font-size: 0.75em;
+  color: var(--text-dim);
+  margin-top: 0.2em;
+}
+
+.search-no-results {
+  padding: 2em;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.9em;
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .search-container {
+    max-width: 100%;
+  }
+  
+  .search-popup {
+    max-height: 300px;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════

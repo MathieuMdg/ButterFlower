@@ -78,7 +78,9 @@
     "noData": "No data",
     "backToAlbums": "Back to albums",
     "seeAlbum": "View album",
-    "trackAlbum": "Album:"
+    "trackAlbum": "Album:",
+    "searchAlbums": "Search for an album...",
+    "noSearchResults": "No albums found"
   },
 
   "blindtest": {
