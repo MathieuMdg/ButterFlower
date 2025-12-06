@@ -12,7 +12,7 @@ router.get('/random', (req, res) => {
     FROM chansons c
     JOIN albums a ON c.album_id = a.id
     ORDER BY RAND()
-    LIMIT 10
+    LIMIT 30
   `;
   db.query(sql, (err, rows) => {
     if (err) return res.status(500).send('Erreur serveur');

@@ -154,6 +154,27 @@
       </div>
     </section>
 
+    <!-- Albums à découvrir -->
+    <section class="album-row">
+      <h2 class="row-title">{{ $t('albums.albumsToDiscover') }}</h2>
+      <div class="albums-scroll">
+        <div 
+          v-for="album in discoverAlbums" 
+          :key="'disc-' + album.id" 
+          class="album-card"
+          @click="goToAlbum(album.id)"
+        >
+          <img :src="album.cover_url" :alt="album.title" class="cover" />
+          <h3>{{ album.title }}</h3>
+          <p>{{ album.artist }}</p>
+          <p class="album-rating" v-if="album.average_rating">
+            {{ album.average_rating.toFixed(1) }} ★
+          </p>
+        </div>
+        <div v-if="!discoverAlbums.length" class="no-data">{{ $t('albums.noData') }}</div>
+      </div>
+    </section>
+
     <!-- Ligne 4 : Chansons à découvrir (aléatoire) -->
     <section class="album-row">
       <h2 class="row-title">{{ $t('albums.songsToDiscover') }}</h2>
@@ -225,6 +246,7 @@ export default {
       recommendedAlbums: [],
       topRatedAlbums: [],
       recentAlbums: [],
+      discoverAlbums: [],
       randomChansons: [],
       userTopAlbums: [],
       userToken: localStorage.getItem('token') || '',
@@ -260,6 +282,7 @@ export default {
         ...this.recommendedAlbums,
         ...this.topRatedAlbums,
         ...this.recentAlbums,
+        ...this.discoverAlbums,
         ...this.userTopAlbums
       ].filter((album, index, self) => 
         // Supprime les doublons par ID
@@ -282,11 +305,12 @@ export default {
     async loadAllData() {
       try {
         // Chargement en parallèle de toutes les données
-        const [allAlbums, recommended, topRated, recent, randomSongs] = await Promise.all([
+        const [allAlbums, recommended, topRated, recent, discover, randomSongs] = await Promise.all([
           api.get('/albums'),
           api.get('/albums/recommended').catch(() => ({ data: [] })),
           api.get('/albums/top-rated').catch(() => ({ data: [] })),
           api.get('/albums/recent').catch(() => ({ data: [] })),
+          api.get('/albums/discover').catch(() => ({ data: [] })),
           api.get('/chansons/random').catch(() => ({ data: [] }))
         ]);
 
@@ -294,6 +318,7 @@ export default {
         this.recommendedAlbums = recommended.data;
         this.topRatedAlbums = topRated.data;
         this.recentAlbums = recent.data;
+        this.discoverAlbums = discover.data;
         this.randomChansons = randomSongs.data;
 
         // Albums préférés de l'utilisateur (si connecté)

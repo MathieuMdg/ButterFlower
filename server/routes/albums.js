@@ -25,7 +25,7 @@ function isAdmin(req, res, next) {
 
 // Albums recommandés
 router.get('/recommended', (req, res) => {
-  const recommendedIds = [1, 4, 7, 10];
+  const recommendedIds = [4, 7, 80, 48, 137, 152];
   const sql = `
     SELECT a.*, AVG(r.rating) as average_rating
     FROM albums a
@@ -48,7 +48,7 @@ router.get('/top-rated', (req, res) => {
     GROUP BY a.id
     HAVING nb_reviews > 0
     ORDER BY average_rating DESC
-    LIMIT 10
+    LIMIT 30
   `;
   db.query(sql, (err, rows) => {
     if (err) return res.status(500).send('Erreur serveur');
@@ -64,7 +64,23 @@ router.get('/recent', (req, res) => {
     LEFT JOIN reviews r ON a.id = r.album_id
     GROUP BY a.id
     ORDER BY a.release_year DESC
-    LIMIT 10
+    LIMIT 30
+  `;
+  db.query(sql, (err, rows) => {
+    if (err) return res.status(500).send('Erreur serveur');
+    res.json(rows);
+  });
+});
+
+// Albums à découvrir (Aléatoire)
+router.get('/discover', (req, res) => {
+  const sql = `
+    SELECT a.*, AVG(r.rating) as average_rating
+    FROM albums a
+    LEFT JOIN reviews r ON a.id = r.album_id
+    GROUP BY a.id
+    ORDER BY RAND()
+    LIMIT 30
   `;
   db.query(sql, (err, rows) => {
     if (err) return res.status(500).send('Erreur serveur');
@@ -81,7 +97,7 @@ router.get('/user/:userId/top-rated', (req, res) => {
     JOIN reviews r ON a.id = r.album_id
     WHERE r.user_id = ?
     ORDER BY r.rating DESC
-    LIMIT 10
+    LIMIT 30
   `;
   db.query(sql, [userId], (err, rows) => {
     if (err) return res.status(500).send('Erreur serveur');
