@@ -14,6 +14,9 @@
         <img :src="album.cover_url" :alt="album.title" class="album-cover" />
         <div class="album-infos">
           <h1 class="album-title">{{ album.title }}</h1>
+          <p class="album-rating" v-if="album.average_rating">
+            {{ album.average_rating.toFixed(1) }} ★
+          </p>
           <span class="album-year">{{ album.release_year }}</span>
           <div class="album-artist">{{ album.artist }}</div>
           <div class="album-genre">{{ album.genre }}</div>
@@ -484,6 +487,13 @@ export default {
   color: var(--text-main);
   margin: 0 0 0.2em 0;
   line-height: 1.2;
+}
+
+.album-rating {
+  color: var(--accent-green) !important;
+  font-weight: 600;
+  font-size: 0.85em !important;
+  margin-top: 0.3em !important;
 }
 
 .album-year {

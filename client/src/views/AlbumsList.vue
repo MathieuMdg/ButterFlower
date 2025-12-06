@@ -435,7 +435,7 @@ export default {
 .albums-page {
   background: var(--bg-dark);
   min-height: 100vh;
-  padding: 80px 4% 3em 4%;
+  padding: 20px 6% 3em;
   color: var(--text-main);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
@@ -660,7 +660,7 @@ export default {
    SEARCH SECTION & POPUP
    ═══════════════════════════════════════════════════════════ */
 .search-section {
-  margin-bottom: 2em;
+  margin-bottom: 4em;
   padding-top: 1em;
 }
 
