@@ -53,7 +53,7 @@
         </table>
       </div>
 
-      <!-- User History Popup -->
+      <!-- User History -->
       <div
         v-if="showUserHistory && popupUserId"
         class="user-history-popup"
@@ -149,30 +149,29 @@ export default {
       this.showUserHistory = true;
       this.popupUserId = userId;
       
-      // Calculate popup position with screen awareness
       this.popupPosition = this.calculatePopupPosition(event.target);
     },
 
     calculatePopupPosition(targetElement) {
       const rect = targetElement.getBoundingClientRect();
-      const popupHeight = 400; // Approximate popup height
+      const popupHeight = 400;
       const gap = 8;
       const viewportHeight = window.innerHeight;
       
-      // Check if there's more space below
       const spaceBelow = viewportHeight - (rect.bottom + gap);
       const spaceAbove = rect.top - gap;
       
       let top;
       
       if (spaceBelow > popupHeight) {
-        // Position below
         top = rect.bottom + gap;
-      } else if (spaceAbove > popupHeight) {
-        // Position above
+      }
+
+      else if (spaceAbove > popupHeight) {
         top = rect.top - popupHeight - gap;
-      } else {
-        // Default
+      }
+      
+      else {
         top = rect.bottom + gap;
       }
       
@@ -213,9 +212,11 @@ export default {
 </script>
 
 <style scoped>
+
 /* ═══════════════════════════════════════════════════════════
    VARIABLES
    ═══════════════════════════════════════════════════════════ */
+
 .admin-page {
   --bg-dark: #14111f;
   --bg-card: #1c1928;
@@ -233,6 +234,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    PAGE LAYOUT
    ═══════════════════════════════════════════════════════════ */
+
 .admin-page {
   min-height: 100vh;
   background: var(--bg-dark);
@@ -258,6 +260,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    TABLE
    ═══════════════════════════════════════════════════════════ */
+
 .table-wrapper {
   overflow-x: auto;
 }
@@ -315,6 +318,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    USER LINK
    ═══════════════════════════════════════════════════════════ */
+
 .user-link {
   color: var(--accent-violet);
   cursor: pointer;
@@ -330,6 +334,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    BADGES
    ═══════════════════════════════════════════════════════════ */
+
 .role-badge {
   display: inline-block;
   padding: 0.3em 0.8em;
@@ -370,6 +375,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    ACTION BUTTONS
    ═══════════════════════════════════════════════════════════ */
+
 .action-btn {
   padding: 0.45em 1em;
   font-size: 0.85em;
@@ -397,6 +403,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════════════════════ */
+
 @media (max-width: 900px) {
   .admin-page {
     padding: 1.5em 1em;
@@ -420,7 +427,6 @@ export default {
   .admin-title {
     font-size: 1.2em;
   }
-  /* Cacher colonnes Email et Role sur mobile */
   .admin-table th:nth-child(3),
   .admin-table td:nth-child(3),
   .admin-table th:nth-child(4),
@@ -430,7 +436,6 @@ export default {
 }
 
 @media (max-width: 400px) {
-  /* Cacher aussi Created At sur très petits écrans */
   .admin-table th:nth-child(5),
   .admin-table td:nth-child(5) {
     display: none;
@@ -439,8 +444,9 @@ export default {
 
 
 /* ═══════════════════════════════════════════════════════════
-   USER HISTORY POPUP
+   USER HISTORY
    ═══════════════════════════════════════════════════════════ */
+
 .user-history-popup {
   background: var(--bg-card);
   color: var(--text-main);
@@ -568,6 +574,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    ACCESS DENIED
    ═══════════════════════════════════════════════════════════ */
+
 .access-denied {
   min-height: 100vh;
   background: var(--bg-dark);
@@ -601,8 +608,9 @@ export default {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   SCROLLBAR HIDDEN
+   SCROLLBAR
    ═══════════════════════════════════════════════════════════ */
+
 * {
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -615,6 +623,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════════════════════ */
+
 @media (max-width: 900px) {
   .admin-page {
     padding: 1.5em 1em;
@@ -671,7 +680,6 @@ export default {
     padding: 1em 0.5em;
   }
 
-  /* Hide less important columns on very small screens */
   .admin-table th:nth-child(1),
   .admin-table td:nth-child(1),
   .admin-table th:nth-child(3),

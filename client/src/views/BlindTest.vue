@@ -1,6 +1,7 @@
 <template>
   <div class="blindtest-page">
-    <!-- Écran d'accueil -->
+
+    <!-- Start Screen -->
     <div v-if="gameState === 'start'" class="start-screen">
       <div class="start-content">
         <h1>{{ $t('blindtest.title') }}</h1>
@@ -26,7 +27,7 @@
       </div>
     </div>
 
-    <!-- Écran de jeu -->
+    <!-- Game Screen -->
     <div v-else-if="gameState === 'playing'" class="game-screen">
       <div class="game-header">
         <div class="progress-info">
@@ -38,11 +39,11 @@
         </div>
       </div>
 
-      <!-- Question non validée -->
+      <!-- Question -->
       <div v-if="!questionValidated" class="question-content">
-        <!-- Hints section -->
+        
         <div class="hints-section">
-        <!-- Lecteur audio (seulement si audio disponible) -->
+        
         <div v-if="currentQuestion?.audioUrl" class="hint-card audio-hint">
             <h3>🎧 {{ $t('blindtest.audioExcerpt') }}</h3>
             <div class="audio-player">
@@ -62,14 +63,14 @@
             ></audio>
         </div>
 
-        <!-- Paroles (seulement si paroles disponibles) -->
+        <!-- Lyrics -->
         <div v-if="currentQuestion?.paroles" class="hint-card lyrics-hint">
             <h3>📝 {{ $t('blindtest.lyricsExcerpt') }}</h3>
             <p class="lyrics-text">"{{ currentQuestion.paroles }}"</p>
         </div>
         </div>
 
-        <!-- Formulaire de réponse -->
+        <!-- Answer -->
         <div class="answer-form">
           <div class="input-group">
             <label>{{ $t('blindtest.rules.songTitle') }}</label>
@@ -119,7 +120,7 @@
         </div>
       </div>
 
-      <!-- Résultat de la question -->
+      <!-- Results -->
       <div v-else class="result-content">
         <div class="result-header">
           <h2 :class="questionScore > 0 ? 'success' : 'fail'">
@@ -162,7 +163,7 @@
       </div>
     </div>
 
-    <!-- Écran de fin -->
+    <!-- End Screen -->
     <div v-else-if="gameState === 'finished'" class="end-screen">
       <div class="end-content">
         <h1>{{ $t('blindtest.end.gameFinished') }}</h1>
@@ -195,7 +196,7 @@
 
         <div class="end-actions">
           <button @click="restartGame" class="btn-restart">{{ $t('blindtest.end.playAgain') }}</button>
-          <router-link to="/albums" class="btn-back">{{ $t('blindtest.end.backToAlbums') }}</router-link>
+          <router-link to="/" class="btn-back">{{ $t('blindtest.end.backToAlbums') }}</router-link>
         </div>
       </div>
     </div>
@@ -209,7 +210,7 @@ export default {
   name: 'BlindTest',
   data() {
     return {
-      gameState: 'start', // 'start', 'playing', 'finished'
+      gameState: 'start',
       loading: false,
       questions: [],
       currentQuestionIndex: 0,
@@ -266,14 +267,13 @@ export default {
     async startGame() {
       this.loading = true;
       try {
-        // Charger les questions
+        
         const questionsRes = await api.get('/blindtest/questions');
         this.questions = questionsRes.data.map(q => ({
           ...q,
           audioUrl: q.audioUrl ? `http://localhost:3000${q.audioUrl}` : null
         }));
 
-        // Charger les suggestions pour l'autocomplétion
         const suggestionsRes = await api.get('/blindtest/suggestions');
         this.suggestions = suggestionsRes.data;
 
@@ -306,9 +306,8 @@ export default {
       if (!audio) return;
 
       this.currentTime = audio.currentTime;
-      this.audioProgress = (audio.currentTime / 30) * 100; // 30 secondes max
+      this.audioProgress = (audio.currentTime / 30) * 100;
 
-      // Arrêter après 30 secondes
       if (audio.currentTime >= 30) {
         audio.pause();
         audio.currentTime = 0;
@@ -332,8 +331,8 @@ export default {
       return str
         .toLowerCase()
         .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '') // Enlever les accents
-        .replace(/[^a-z0-9]/g, ''); // Enlever la ponctuation
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]/g, '');
     },
 
     isCorrect(type) {
@@ -348,13 +347,11 @@ export default {
     validateAnswer() {
       if (!this.currentQuestion) return;
 
-      // Arrêter l'audio
       if (this.$refs.audioPlayer) {
         this.$refs.audioPlayer.pause();
         this.isPlaying = false;
       }
 
-      // Calculer le score
       let score = 0;
       if (this.isCorrect('chanson')) score++;
       if (this.isCorrect('artiste')) score++;
@@ -368,7 +365,7 @@ export default {
 
     nextQuestion() {
       if (this.currentQuestionIndex < 9) {
-        // Passer à la question suivante
+
         this.currentQuestionIndex++;
         this.questionValidated = false;
         this.questionScore = 0;
@@ -381,7 +378,6 @@ export default {
         this.currentTime = 0;
         this.isPlaying = false;
       } else {
-        // Fin de partie
         this.gameState = 'finished';
       }
     },
@@ -406,7 +402,6 @@ export default {
   },
 
   beforeUnmount() {
-    // Arrêter l'audio avant de quitter la page
     if (this.$refs.audioPlayer) {
       this.$refs.audioPlayer.pause();
     }
@@ -415,9 +410,11 @@ export default {
 </script>
 
 <style scoped>
+
 /* ═══════════════════════════════════════════════════════════
-   VARIABLES (harmonisées avec AlbumsList)
+   VARIABLES
    ═══════════════════════════════════════════════════════════ */
+
 .blindtest-page {
   --bg-dark: #14111f;
   --bg-card: #1c1928;
@@ -440,8 +437,9 @@ export default {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   ÉCRAN D'ACCUEIL
+   SCREEN
    ═══════════════════════════════════════════════════════════ */
+
 .start-screen {
   display: flex;
   align-items: center;
@@ -524,8 +522,9 @@ export default {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   ÉCRAN DE JEU
+   GAME SCREEN
    ═══════════════════════════════════════════════════════════ */
+
 .game-screen {
   max-width: 900px;
   margin: 0 auto;
@@ -569,6 +568,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    SECTION QUESTION
    ═══════════════════════════════════════════════════════════ */
+
 .question-content {
   display: flex;
   flex-direction: column;
@@ -603,7 +603,6 @@ export default {
   font-weight: 600;
 }
 
-/* Lecteur audio */
 .audio-player {
   display: flex;
   flex-direction: column;
@@ -651,7 +650,6 @@ export default {
   font-size: 0.9rem;
 }
 
-/* Paroles */
 .lyrics-text {
   font-style: italic;
   color: var(--text-main);
@@ -662,8 +660,9 @@ export default {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   FORMULAIRE DE RÉPONSE
+   ANSWER
    ═══════════════════════════════════════════════════════════ */
+
 .answer-form {
   background: var(--bg-card);
   border-radius: 12px;
@@ -728,8 +727,9 @@ export default {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   RÉSULTAT DE LA QUESTION
+   RESULTS
    ═══════════════════════════════════════════════════════════ */
+
 .result-content {
   max-width: 700px;
   margin: 0 auto;
@@ -894,8 +894,9 @@ export default {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   ÉCRAN DE FIN
+   END SCREEN
    ═══════════════════════════════════════════════════════════ */
+
 .end-screen {
   display: flex;
   align-items: center;
@@ -1064,6 +1065,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════════════════════ */
+   
 @media (max-width: 900px) {
   .hints-section {
     flex-direction: column;

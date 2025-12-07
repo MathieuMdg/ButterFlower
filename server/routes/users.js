@@ -1,4 +1,3 @@
-// server/routes/users.js
 const express = require('express');
 const router = express.Router();
 const userModel = require('../models/userModel');
@@ -17,7 +16,6 @@ function isAdmin(req, res, next) {
   }
 }
 
-// Ajoute :
 router.get('/', isAdmin, (req, res) => {
   userModel.getAllUsers((err, users) => {
     if (err) return res.status(500).json({error: 'Erreur serveur'});
@@ -81,13 +79,12 @@ router.post('/logout', (req, res) => {
 });
 
 
-// Route pour /users/me
 router.get('/me', (req, res) => {
-  // Récupère le token envoyé dans l'URL
+
   const token = req.query.token;
   if (!token) return res.status(401).json({ error: 'Token manquant' });
   try {
-    const payload = jwt.verify(token, 'secret'); // Mets ta vraie clé !
+    const payload = jwt.verify(token, 'secret');
     userModel.findUserById(payload.id, (err, user) => {
       if (err || !user) return res.status(404).json({ error: 'User inconnu' });
       res.json({

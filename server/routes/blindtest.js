@@ -3,7 +3,6 @@ const router = express.Router();
 const db = require('../config/db');
 const axios = require('axios');
 
-// GET /blindtest/questions - Récupère 10 questions aléatoires
 router.get('/questions', (req, res) => {
   const query = `
     SELECT 
@@ -34,7 +33,6 @@ router.get('/questions', (req, res) => {
       return res.status(404).json({ error: 'Pas assez de chansons disponibles pour le blind test' });
     }
 
-    // Formater les questions avec alternance aléatoire audio/paroles
     const questions = chansons.map(chanson => {
       let showAudio = Math.random() < 0.5;
       if (!chanson.paroles) showAudio = true;
@@ -42,7 +40,7 @@ router.get('/questions', (req, res) => {
       return {
         id: chanson.id,
         hintType: showAudio ? 'audio' : 'lyrics',
-        // CHANGEMENT : utiliser la route proxy au lieu de l'URL directe Deezer
+
         audioUrl: showAudio ? `/api/blindtest/audio-proxy/${chanson.id}` : null,
         paroles: !showAudio ? chanson.paroles : null,
         reponses: {
@@ -63,7 +61,6 @@ router.get('/questions', (req, res) => {
   });
 });
 
-// GET /blindtest/suggestions - Pour l'autocomplétion
 router.get('/suggestions', (req, res) => {
   db.query('SELECT DISTINCT titre FROM chansons', (err1, chansons) => {
     if (err1) {
@@ -93,12 +90,10 @@ router.get('/suggestions', (req, res) => {
   });
 });
 
-// ROUTE PROXY avec récupération fraîche de l'URL depuis l'API Deezer
 router.get('/audio-proxy/:trackId', async (req, res) => {
   const { trackId } = req.params;
   
   try {
-    // Récupérer le deezer_id depuis la base de données
     db.query(
       'SELECT deezer_id FROM chansons WHERE id = ?', 
       [trackId], 
@@ -119,7 +114,7 @@ router.get('/audio-proxy/:trackId', async (req, res) => {
         }
 
         try {
-          // Récupérer l'URL fraîche depuis l'API Deezer
+        
           const deezerResponse = await axios.get(`https://api.deezer.com/track/${deezerId}`);
           const previewUrl = deezerResponse.data.preview;
 
@@ -127,7 +122,6 @@ router.get('/audio-proxy/:trackId', async (req, res) => {
             return res.status(404).json({ error: 'No preview available' });
           }
 
-          // Fetch l'audio depuis Deezer et pipe vers le client
           const audioResponse = await axios({
             method: 'get',
             url: previewUrl,
@@ -135,14 +129,12 @@ router.get('/audio-proxy/:trackId', async (req, res) => {
             timeout: 10000
           });
 
-          // Copier les headers importants
           res.set({
             'Content-Type': audioResponse.headers['content-type'] || 'audio/mpeg',
             'Accept-Ranges': 'bytes',
-            'Cache-Control': 'public, max-age=300' // Cache 5 minutes seulement
+            'Cache-Control': 'public, max-age=300'
           });
 
-          // Pipe le stream audio vers la réponse
           audioResponse.data.pipe(res);
 
         } catch (deezerError) {

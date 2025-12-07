@@ -18,8 +18,8 @@ app.use(session({
 }));
 
 app.use(cors({
-  origin: 'http://localhost:8081',  // Vue dev server
-  credentials: true                // allow cookies + sessions
+  origin: 'http://localhost:8081',
+  credentials: true
 }));
 app.use(bodyParser.json());
 app.use(express.json());
@@ -29,9 +29,6 @@ app.use('/api/users', userRoutes);
 app.use('/api/chansons', chansonRoutes);
 app.use('/api/blindtest', blindtestRoutes);
 
-
-
-// Exemple de route test
 app.get('/', (req, res) => {
   res.send('Hello ButterFlower!');
 });

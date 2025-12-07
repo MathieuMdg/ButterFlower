@@ -1,4 +1,3 @@
-// userStore.js
 import { reactive } from 'vue';
 
 export const userStore = reactive({
@@ -7,7 +6,6 @@ export const userStore = reactive({
   role: null,
   isLoggedIn: false,
 
-  // Méthode pour initialiser depuis le token
   initFromToken() {
     const token = localStorage.getItem('token');
     if (token) {
@@ -23,7 +21,6 @@ export const userStore = reactive({
     }
   },
 
-  // Méthode pour se connecter
   login(data) {
     localStorage.setItem('token', data.token);
     this.userId = data.userId;
@@ -32,7 +29,6 @@ export const userStore = reactive({
     this.isLoggedIn = true;
   },
 
-  // Méthode pour se déconnecter
   logout() {
     localStorage.removeItem('token');
     this.userId = null;

@@ -1,6 +1,7 @@
 <template>
   <div class="albums-page">
-    <!-- Barre de profil utilisateur -->
+
+    <!-- User Profile Bar -->
     <div class="user-profile-bar">
       <div class="profile-menu-container">
         <img
@@ -27,7 +28,8 @@
             @click="redirectToLogin"
           >{{ $t('profile.login') }}</button>
         </div>
-        <!-- Fenêtre historique flottante -->
+
+        <!-- Profile History User -->
         <div v-if="historyOpen" class="profile-history-modal">
           <div class="profile-history-header">
             <span>{{ $t('profile.historyHeader') }}</span>
@@ -61,7 +63,7 @@
       </div>
     </div>
 
-    <!-- Barre de recherche avec popup -->
+    <!-- Search Bar -->
     <section class="search-section">
       <div class="search-container">
         <input
@@ -73,7 +75,7 @@
           @input="handleSearch"
         />
         
-        <!-- Popup des résultats -->
+        <!-- Results -->
         <div v-if="showSearchResults && searchQuery.trim()" class="search-popup">
           <div v-if="searchResults.length" class="search-results">
             <div
@@ -97,7 +99,7 @@
       </div>
     </section>
 
-    <!-- Ligne 1 : Recommandés pour vous -->
+    <!-- Recommended -->
     <section class="album-row">
       <h2 class="row-title">{{ $t('albums.recommendedForYou') }}</h2>
       <div class="albums-scroll">
@@ -115,7 +117,7 @@
       </div>
     </section>
 
-    <!-- Ligne 2 : Les mieux notés -->
+    <!-- Top Rated -->
     <section class="album-row">
       <h2 class="row-title">{{ $t('albums.topRated') }}</h2>
       <div class="albums-scroll">
@@ -136,7 +138,7 @@
       </div>
     </section>
 
-    <!-- Ligne 3 : Les plus récents -->
+    <!-- Recent Releases -->
     <section class="album-row">
       <h2 class="row-title">{{ $t('albums.recentReleases') }}</h2>
       <div class="albums-scroll">
@@ -154,7 +156,7 @@
       </div>
     </section>
 
-    <!-- Albums à découvrir -->
+    <!-- Discover -->
     <section class="album-row">
       <h2 class="row-title">{{ $t('albums.albumsToDiscover') }}</h2>
       <div class="albums-scroll">
@@ -175,7 +177,7 @@
       </div>
     </section>
 
-    <!-- Ligne 4 : Chansons à découvrir (aléatoire) -->
+    <!-- Random -->
     <section class="album-row">
       <h2 class="row-title">{{ $t('albums.songsToDiscover') }}</h2>
       <div class="albums-scroll">
@@ -194,7 +196,7 @@
       </div>
     </section>
 
-    <!-- Ligne 5 : Vos albums préférés (utilisateur connecté uniquement) -->
+    <!-- Your Favorite -->
     <section class="album-row" v-if="isLoggedIn && userTopAlbums.length">
       <h2 class="row-title">{{ $t('albums.yourFavoriteAlbums') }}</h2>
       <div class="albums-scroll">
@@ -212,7 +214,7 @@
       </div>
     </section>
 
-    <!-- Ligne 6 : Tous les albums (ancienne grille) -->
+    <!-- All Albums -->
     <section class="album-row">
       <h2 class="row-title">{{ $t('albums.allAlbums') }}</h2>
       <div class="albums-scroll">
@@ -276,7 +278,7 @@ export default {
         encodeURIComponent(this.usernameDisplay);
     },
     allAlbumsForSearch() {
-      // Combine tous les albums disponibles pour la recherche
+  
       return [
         ...this.albums,
         ...this.recommendedAlbums,
@@ -285,7 +287,7 @@ export default {
         ...this.discoverAlbums,
         ...this.userTopAlbums
       ].filter((album, index, self) => 
-        // Supprime les doublons par ID
+        
         index === self.findIndex(a => a.id === album.id)
       );
     }
@@ -304,7 +306,7 @@ export default {
   methods: {
     async loadAllData() {
       try {
-        // Chargement en parallèle de toutes les données
+        
         const [allAlbums, recommended, topRated, recent, discover, randomSongs] = await Promise.all([
           api.get('/albums'),
           api.get('/albums/recommended').catch(() => ({ data: [] })),
@@ -321,7 +323,6 @@ export default {
         this.discoverAlbums = discover.data;
         this.randomChansons = randomSongs.data;
 
-        // Albums préférés de l'utilisateur (si connecté)
         if (this.isLoggedIn) {
           const userId = this.getUserIdFromToken(this.userToken);
           if (userId) {
@@ -405,7 +406,7 @@ export default {
           album.title.toLowerCase().includes(q) ||
           album.artist.toLowerCase().includes(q)
         )
-        .slice(0, 8); // Limite à 8 résultats max
+        .slice(0, 8);
     },
     goToAlbumFromSearch(albumId) {
       this.searchQuery = '';
@@ -424,9 +425,11 @@ export default {
 </script>
 
 <style>
+
 /* ═══════════════════════════════════════════════════════════
    VARIABLES & RESET
    ═══════════════════════════════════════════════════════════ */
+
 :root {
   --bg-dark: #14111f;
   --bg-card: #1c1928;
@@ -457,6 +460,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    PAGE LAYOUT
    ═══════════════════════════════════════════════════════════ */
+
 .albums-page {
   background: var(--bg-dark);
   min-height: 100vh;
@@ -468,6 +472,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    SECTION ROWS
    ═══════════════════════════════════════════════════════════ */
+
 .album-row {
   margin-bottom: 3em;
 }
@@ -494,34 +499,36 @@ export default {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   HORIZONTAL SCROLL CONTAINER
+   HORIZONTAL SCROLL
    ═══════════════════════════════════════════════════════════ */
+
 .albums-scroll {
   display: flex;
-  gap: 1.5em; /* Espace augmenté pour aérer */
+  gap: 1.5em;
   overflow-x: auto;
-  padding: 1em 0.5em 2em 0.5em; /* Padding pour laisser place à l'ombre et au hover */
+  padding: 1em 0.5em 2em 0.5em;
   scroll-behavior: smooth;
 }
 
 /* ═══════════════════════════════════════════════════════════
-   ALBUM & CHANSON CARDS (CORRIGÉ)
+   ALBUM & CHANSON CARDS
    ═══════════════════════════════════════════════════════════ */
+
 .album-card,
 .chanson-card {
-  /* FIX: Taille fixe unifiée */
+
   flex: 0 0 160px; 
   width: 160px; 
   background: transparent;
   border-radius: 4px;
   text-align: left;
   cursor: pointer;
-  /* EFFET: Transition fluide sur tout le bloc */
+
   transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); 
   position: relative;
 }
 
-/* EFFET: Le bloc entier monte un peu */
+
 .album-card:hover,
 .chanson-card:hover {
   transform: translateY(-8px);
@@ -530,16 +537,14 @@ export default {
 .album-card .cover,
 .chanson-card .cover {
   width: 100%;
-  /* FIX: Force le ratio carré parfait */
   aspect-ratio: 1 / 1; 
   object-fit: cover;
-  border-radius: 8px; /* Un peu plus arrondi */
+  border-radius: 8px;
   box-shadow: 0 4px 15px var(--shadow-card);
   border: 1px solid transparent;
   transition: all 0.3s ease;
 }
 
-/* EFFET: L'image brille au survol */
 .album-card:hover .cover,
 .chanson-card:hover .cover {
   border-color: var(--accent-violet);
@@ -552,7 +557,6 @@ export default {
   font-weight: 600;
   color: var(--text-main);
   margin: 0.8em 0 0.2em 0;
-  /* FIX: Coupe proprement le texte trop long */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -593,8 +597,9 @@ export default {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   USER PROFILE BAR (Reste inchangé)
+   USER PROFILE BAR
    ═══════════════════════════════════════════════════════════ */
+
 .user-profile-bar {
   position: fixed;
   top: 1.2em;
@@ -630,7 +635,7 @@ export default {
   font-weight: 500;
   margin-top: 0.4em;
   text-align: center;
-  background: rgba(20, 17, 31, 0.8); /* Petit fond pour lisibilité */
+  background: rgba(20, 17, 31, 0.8);
   padding: 2px 6px;
   border-radius: 4px;
 }
@@ -638,6 +643,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    DROPDOWN MENU
    ═══════════════════════════════════════════════════════════ */
+
 .profile-dropdown {
   position: absolute;
   top: 50px;
@@ -682,8 +688,9 @@ export default {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   SEARCH SECTION & POPUP
+   SEARCH SECTION
    ═══════════════════════════════════════════════════════════ */
+
 .search-section {
   margin-bottom: 4em;
   padding-top: 1em;
@@ -717,7 +724,6 @@ export default {
   box-shadow: 0 0 0 3px var(--shadow-glow);
 }
 
-/* Popup des résultats */
 .search-popup {
   position: absolute;
   top: calc(100% + 0.5em);
@@ -808,7 +814,6 @@ export default {
   font-style: italic;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .search-container {
     max-width: 100%;
@@ -822,6 +827,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    HISTORY MODAL
    ═══════════════════════════════════════════════════════════ */
+
 .profile-history-modal {
   position: fixed;
   top: 70px;
@@ -935,6 +941,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════════════════════ */
+
 @media (max-width: 768px) {
   .albums-page {
     padding: 70px 3% 2em 3%;
@@ -982,4 +989,5 @@ export default {
     font-size: 0.85em;
   }
 }
+
 </style>

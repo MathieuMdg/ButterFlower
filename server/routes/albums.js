@@ -4,24 +4,19 @@ const albumModel = require('../models/albumModel');
 const db = require('../config/db');
 const jwt = require('jsonwebtoken');
 
-// ═══════════════════════════════════════════════════════════
-// MIDDLEWARE - Vérification admin
-// ═══════════════════════════════════════════════════════════
+
+// Admin Verification
 function isAdmin(req, res, next) {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) return res.status(403).json({ error: 'Non autorisé' });
   try {
-    const payload = jwt.verify(token, 'secret'); // Même clé que tes autres fichiers
+    const payload = jwt.verify(token, 'secret');
     if (payload.role === 'admin') next();
     else res.status(403).json({ error: 'Non autorisé' });
   } catch {
     res.status(401).json({ error: 'Token invalide' });
   }
 }
-
-// ═══════════════════════════════════════════════════════════
-// ROUTES GET PUBLIQUES
-// ═══════════════════════════════════════════════════════════
 
 // Albums recommandés
 router.get('/recommended', (req, res) => {
@@ -39,7 +34,7 @@ router.get('/recommended', (req, res) => {
   });
 });
 
-// Albums les mieux notés
+// Top Rated
 router.get('/top-rated', (req, res) => {
   const sql = `
     SELECT a.*, AVG(r.rating) as average_rating, COUNT(r.id) as nb_reviews
@@ -56,7 +51,7 @@ router.get('/top-rated', (req, res) => {
   });
 });
 
-// Albums les plus récents
+// Recent
 router.get('/recent', (req, res) => {
   const sql = `
     SELECT a.*, AVG(r.rating) as average_rating
@@ -72,7 +67,7 @@ router.get('/recent', (req, res) => {
   });
 });
 
-// Albums à découvrir (Aléatoire)
+// Discover
 router.get('/discover', (req, res) => {
   const sql = `
     SELECT a.*, AVG(r.rating) as average_rating
@@ -88,7 +83,7 @@ router.get('/discover', (req, res) => {
   });
 });
 
-// Albums les mieux notés par un utilisateur
+// Top Rated User
 router.get('/user/:userId/top-rated', (req, res) => {
   const userId = req.params.userId;
   const sql = `
@@ -105,7 +100,7 @@ router.get('/user/:userId/top-rated', (req, res) => {
   });
 });
 
-// Liste tous les albums
+// All Albums
 router.get('/', (req, res) => {
   const sql = `
     SELECT
@@ -123,7 +118,7 @@ router.get('/', (req, res) => {
   });
 });
 
-// Détail d'un album par ID
+// Album Detail
 router.get('/:id', (req, res) => {
   const albumId = req.params.id;
   db.query('SELECT * FROM albums WHERE id = ?', [albumId], (err, rows) => {
@@ -133,7 +128,7 @@ router.get('/:id', (req, res) => {
   });
 });
 
-// Chansons d'un album
+// Chansons
 router.get('/:id/chansons', (req, res) => {
   const albumId = req.params.id;
   db.query('SELECT * FROM chansons WHERE album_id = ?', [albumId], (err, rows) => {
@@ -142,11 +137,8 @@ router.get('/:id/chansons', (req, res) => {
   });
 });
 
-// ═══════════════════════════════════════════════════════════
-// ROUTES ADMIN (POST, PUT, DELETE)
-// ═══════════════════════════════════════════════════════════
 
-// Ajouter un nouvel album
+// Add Album
 router.post('/', isAdmin, (req, res) => {
   const { title, artist, release_year, genre, cover_url } = req.body;
   
@@ -169,7 +161,7 @@ router.post('/', isAdmin, (req, res) => {
   });
 });
 
-// Modifier un album
+// Modify Album
 router.put('/:id', isAdmin, (req, res) => {
   const albumId = req.params.id;
   const { title, artist, release_year, genre, cover_url } = req.body;
@@ -193,23 +185,19 @@ router.put('/:id', isAdmin, (req, res) => {
   });
 });
 
-// Supprimer un album
+// Delete Album
 router.delete('/:id', isAdmin, (req, res) => {
   const albumId = req.params.id;
   
-  // Supprimer les notes des chansons
   db.query('DELETE FROM notes_chansons WHERE chanson_id IN (SELECT id FROM chansons WHERE album_id = ?)', [albumId], (err) => {
     if (err) return res.status(500).send('Erreur serveur');
     
-    // Supprimer les chansons
     db.query('DELETE FROM chansons WHERE album_id = ?', [albumId], (err) => {
       if (err) return res.status(500).send('Erreur serveur');
       
-      // Supprimer les reviews
       db.query('DELETE FROM reviews WHERE album_id = ?', [albumId], (err) => {
         if (err) return res.status(500).send('Erreur serveur');
         
-        // Supprimer l'album
         db.query('DELETE FROM albums WHERE id = ?', [albumId], (err, result) => {
           if (err) return res.status(500).send('Erreur serveur');
           if (result.affectedRows === 0) {

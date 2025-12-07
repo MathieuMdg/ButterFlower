@@ -1,6 +1,6 @@
 const mysql = require('mysql2');
 
-// pour skip la db si le pelo le demande
+// SKIP DATABASE
 if (process.env.SKIP_DB === 'true') {
     console.warn('SKIP_DB=true: using stubbed DB (no real DB connection).');
     module.exports = {
@@ -19,9 +19,7 @@ if (process.env.SKIP_DB === 'true') {
     const host = process.env.DB_HOST || '127.0.0.1';
     const user = process.env.DB_USER || 'root';
 
-    // YOUR MYSQL PASSWORD HERE
-    const password = process.env.DB_PASS || 'password'; // YOUR MYSQL PASSWORD HERE
-    // YOUR MYSQL PASSWORD HERE
+    const password = process.env.DB_PASS || 'password';
 
     const database = process.env.DB_NAME || 'butterflower';
     const port = process.env.DB_PORT ? Number(process.env.DB_PORT) : 3306;

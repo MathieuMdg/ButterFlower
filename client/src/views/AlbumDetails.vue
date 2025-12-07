@@ -9,7 +9,7 @@
     </button>
     <div class="details-grid">
       
-      <!-- À gauche : cover + infos + chansons -->
+      <!-- Left side -->
       <div class="left-side">
         <img :src="album.cover_url" :alt="album.title" class="album-cover" />
         <div class="album-infos">
@@ -22,13 +22,14 @@
           <div class="album-genre">{{ album.genre }}</div>
         </div>
 
-        <!-- Liste des chansons sous la cover -->
+        <!-- Album chansons -->
         <div class="album-chansons" v-if="chansons.length">
           <h3 class="chansons-title">{{ $t('albumDetails.tracklistTitle') }}</h3>
           
           <div v-for="(chanson, index) in chansons" :key="chanson.id" class="chanson-wrapper">
             <div class="chanson-row">
-              <!-- Bouton Play -->
+
+              <!-- Play Button -->
               <button 
                 class="play-btn" 
                 @click="selectChanson(index)"
@@ -38,13 +39,13 @@
                 <span>▶</span>
               </button>
 
-              <!-- Infos chanson -->
+              <!-- Chanson infos -->
               <div class="chanson-info">
                 <span class="chanson-title" :title="chanson.titre">{{ truncateTitle(chanson.titre, 25) }} - </span>
                 <span class="chanson-duration" v-if="chanson.duree">{{ chanson.duree }}</span>
               </div>
 
-              <!-- Notation -->
+              <!-- Rating -->
               <div class="chanson-rating">
                 <StarRating
                   :modelValue="chanson.my_note"
@@ -54,7 +55,6 @@
             </div>
 
             <div v-if="currentPlaying === index" class="iframe-player-inline">
-              <!-- Cas 1: On a un ID Deezer (Idéal) -->
               <iframe
                 v-if="chanson.deezer_id"
                 title="deezer-widget"
@@ -64,7 +64,6 @@
                 allow="encrypted-media; clipboard-write">
               </iframe>
 
-              <!-- Cas 2: Pas de Deezer ID -->
               <div v-else class="no-track-msg">
                 <p>Lecteur non disponible pour ce titre.</p>
               </div>
@@ -78,7 +77,7 @@
         </div>
       </div>
 
-      <!-- À droite : reviews + form -->
+      <!-- Right side -->
       <div class="right-side">
         <div v-if="userToken" class="review-form-box">
           <h4 class="form-title">{{ $t('albumDetails.addReviewBox.title') }}</h4>
@@ -160,7 +159,7 @@
             <hr class="review-separator" />
           </div>
 
-          <!-- Formulaire d'édition -->
+          <!-- Edit Review -->
           <div v-if="editMode" class="edit-review-modal">
             <h4>{{ $t('albumDetails.reviews.edit') }}</h4>
             <form @submit.prevent="submitEditReview" class="flex-form">
@@ -390,9 +389,11 @@ export default {
 </script>
 
 <style scoped>
+
 /* ═══════════════════════════════════════════════════════════
    VARIABLES
    ═══════════════════════════════════════════════════════════ */
+
 .album-details-letterboxd {
   --bg-dark: #14111f;
   --bg-card: #1c1928;
@@ -409,6 +410,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    PAGE LAYOUT
    ═══════════════════════════════════════════════════════════ */
+
 .album-details-letterboxd {
   width: 100%;
   min-height: 100vh;
@@ -431,6 +433,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    BACK BUTTON
    ═══════════════════════════════════════════════════════════ */
+
 .back-btn {
   background: none;
   border: none;
@@ -454,16 +457,17 @@ export default {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   LEFT SIDE - COVER & INFOS
+   LEFT SIDE
    ═══════════════════════════════════════════════════════════ */
+
 .left-side {
-  flex: 0 0 400px;  /* Réduit de 320px à 250px */
+  flex: 0 0 400px; 
   display: flex;
   flex-direction: column;
 }
 
 .album-cover {
-  width: 200px;  /* Taille fixe réduite */
+  width: 200px;
   height: 200px;
   object-fit: cover;
   border-radius: 6px;
@@ -478,11 +482,11 @@ export default {
 
 .album-infos {
   margin-top: 1.2em;
-  max-width: 200px;  /* Aligner avec la cover */
+  max-width: 200px;
 }
 
 .album-title {
-  font-size: 1.3em;  /* Réduit */
+  font-size: 1.3em;
   font-weight: 700;
   color: var(--text-main);
   margin: 0 0 0.2em 0;
@@ -503,14 +507,14 @@ export default {
 }
 
 .album-artist {
-  font-size: 1em;  /* Réduit */
+  font-size: 1em;
   color: var(--text-muted);
   margin-top: 0.3em;
 }
 
 .album-genre {
   display: inline-block;
-  font-size: 0.75em;  /* Réduit */
+  font-size: 0.75em;
   color: var(--accent-violet);
   background: rgba(128, 43, 177, 0.15);
   padding: 0.25em 0.7em;
@@ -521,8 +525,9 @@ export default {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   CHANSONS LIST - Ajuster aussi
+   CHANSONS LIST
    ═══════════════════════════════════════════════════════════ */
+
 .album-chansons {
   margin-top: 1.5em;
   width: 100%;
@@ -553,7 +558,6 @@ export default {
   margin-bottom: 0.1em;
 }
 
-/* Play Button - Plus petit */
 .play-btn {
   width: 28px;
   height: 28px;
@@ -591,7 +595,6 @@ export default {
   cursor: default;
 }
 
-/* Tooltip on hover */
 .chanson-title:hover::after {
   content: attr(title);
   position: absolute;
@@ -644,8 +647,9 @@ export default {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   RIGHT SIDE - REVIEWS
+   REVIEWS
    ═══════════════════════════════════════════════════════════ */
+
 .right-side {
   flex: 1;
   min-width: 0;
@@ -747,6 +751,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    REVIEWS LIST
    ═══════════════════════════════════════════════════════════ */
+
 .reviews-h3 {
   font-size: 0.8em;
   font-weight: 600;
@@ -825,6 +830,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    EDIT MODAL
    ═══════════════════════════════════════════════════════════ */
+
 .edit-review-modal {
   background: var(--bg-card);
   border-radius: 8px;
@@ -858,8 +864,9 @@ export default {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   USER HISTORY POPUP
+   USER HISTORY
    ═══════════════════════════════════════════════════════════ */
+
 .user-history-popup {
   background: var(--bg-card);
   color: var(--text-main);
@@ -965,6 +972,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    NOTIFICATIONS
    ═══════════════════════════════════════════════════════════ */
+
 .notify-success {
   position: fixed;
   top: 0;
@@ -995,6 +1003,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    LOADING STATE
    ═══════════════════════════════════════════════════════════ */
+
 .loading {
   display: flex;
   align-items: center;
@@ -1006,8 +1015,9 @@ export default {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   SCROLLBAR HIDDEN
+   SCROLLBAR
    ═══════════════════════════════════════════════════════════ */
+
 * {
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -1020,6 +1030,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════════════════════ */
+
 @media (max-width: 900px) {
   .details-grid {
     flex-direction: column;
@@ -1138,8 +1149,9 @@ export default {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   IFRAME PLAYER - INLINE (under song row)
+   IFRAME PLAYER
    ═══════════════════════════════════════════════════════════ */
+
 .iframe-player-inline {
   grid-column: 1 / -1;
   margin-top: 1em;

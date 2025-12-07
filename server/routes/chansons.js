@@ -2,10 +2,6 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
 
-
-// ✅ Routes spécifiques EN PREMIER
-
-// Chansons aléatoires
 router.get('/random', (req, res) => {
   const sql = `
     SELECT c.*, a.title as album_title, a.cover_url, a.artist
@@ -20,8 +16,6 @@ router.get('/random', (req, res) => {
   });
 });
 
-
-// Chansons d'un album
 router.get('/album/:albumId', (req, res) => {
   const albumId = req.params.albumId;
   db.query(
@@ -34,10 +28,6 @@ router.get('/album/:albumId', (req, res) => {
   );
 });
 
-
-// ✅ Routes avec paramètres APRÈS
-
-// Récupérer la note d'un utilisateur pour une chanson
 router.get('/:id/note/:userId', (req, res) => {
   const { id, userId } = req.params;
   db.query(
@@ -52,7 +42,6 @@ router.get('/:id/note/:userId', (req, res) => {
 });
 
 
-// Enregistrer ou modifier une note pour une chanson
 router.post('/:id/note', (req, res) => {
   const chansonId = req.params.id;
   const { user_id, note } = req.body;

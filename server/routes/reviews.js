@@ -4,7 +4,6 @@ const reviewModel = require('../models/reviewModel');
 const userModel = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 
-// Lister reviews d’un album
 router.get('/album/:albumId', (req, res) => {
   reviewModel.getReviewsByAlbum(req.params.albumId, (err, rows) => {
     if (err) return res.status(500).send('Erreur serveur');
@@ -17,7 +16,7 @@ router.get('/user/:userId', (req, res) => {
     res.json(rows);
   });
 });
-// server/routes/reviews.js
+
 router.get('/user/:id', (req, res) => {
   reviewModel.getReviewsByUser(req.params.id, (err, results) => {
     if (err) return res.status(500).json({ error: 'Erreur serveur' });
@@ -25,13 +24,9 @@ router.get('/user/:id', (req, res) => {
   });
 });
 
-
-
-// Ajouter
 router.post('/', (req, res) => {
   const { user_id, album_id, rating, review_text } = req.body;
 
-  // Vérifie la permission de commenter
   userModel.findUserById(user_id, (err, user) => {
     if (err || !user) return res.status(401).json({ error: 'Utilisateur inconnu' });
 
@@ -45,7 +40,6 @@ router.post('/', (req, res) => {
   });
 });
 
-// Modifier
 router.put('/:id', (req, res) => {
   reviewModel.updateReview(req.params.id, req.body, (err, result) => {
     if (err) return res.status(500).send('Erreur serveur');
@@ -53,7 +47,6 @@ router.put('/:id', (req, res) => {
   });
 });
 
-// Supprimer
 router.delete('/:id', (req, res) => {
   reviewModel.deleteReview(req.params.id, (err, result) => {
     if (err) return res.status(500).send('Erreur serveur');
@@ -61,20 +54,16 @@ router.delete('/:id', (req, res) => {
   });
 });
 
-// Middleware pour vérifier le rôle admin (à placer dans ce fichier !)
 function isAdmin(req, res, next) {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) return res.status(403).json({ error: 'Non autorisé' });
   try {
-    const payload = jwt.verify(token, 'secret'); // Mets ta vraie clé ici
+    const payload = jwt.verify(token, 'secret');
     if (payload.role === 'admin') next();
     else res.status(403).json({ error: 'Non autorisé' });
   } catch {
     res.status(401).json({ error: 'Token invalide' });
   }
 }
-
-
-
 
 module.exports = router;

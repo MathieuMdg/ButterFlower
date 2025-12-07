@@ -3,12 +3,12 @@
     <div class="admin-container">
       <h2 class="admin-title"> {{ $t('admin.albums.pageTitle') }}</h2>
 
-      <!-- Bouton Ajouter -->
+      <!-- Add Button -->
       <button class="add-album-btn" @click="openAddModal">
         <span>+</span> {{ $t('admin.albums.addAlbumButton') }}
       </button>
 
-      <!-- Liste des albums -->
+      <!-- Albums List -->
       <div class="albums-table-wrapper">
         <table class="admin-table">
           <thead>
@@ -46,7 +46,7 @@
         </table>
       </div>
 
-      <!-- Modal Ajouter/Modifier -->
+      <!-- Add/Modify -->
       <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
         <div class="modal-content">
           <div class="modal-header">
@@ -109,7 +109,7 @@
               />
             </div>
             
-            <!-- Prévisualisation de la cover -->
+            <!-- Cover Preview -->
             <div v-if="formData.cover_url" class="cover-preview">
               <label>{{ $t('admin.albums.modal.labels.previewLabel') }}</label>
               <img :src="formData.cover_url" alt="Preview" @error="onCoverError" />
@@ -129,7 +129,7 @@
         </div>
       </div>
 
-      <!-- Modal Confirmation Suppression -->
+      <!-- Delete -->
       <div v-if="showDeleteConfirm" class="modal-overlay" @click.self="closeDeleteConfirm">
         <div class="modal-content delete-confirm">
           <div class="delete-icon">⚠️</div>
@@ -150,7 +150,7 @@
         </div>
       </div>
 
-      <!-- Notification -->
+      <!-- Notifications -->
       <div v-if="notification" class="notification" :class="notification.type">
         {{ notification.message }}
       </div>
@@ -310,6 +310,7 @@ export default {
 </script>
 
 <style scoped>
+
 /* ═══════════════════════════════════════════════════════════
    VARIABLES
    ═══════════════════════════════════════════════════════════ */
@@ -385,6 +386,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    TABLE
    ═══════════════════════════════════════════════════════════ */
+
 .albums-table-wrapper {
   overflow-x: auto;
 }
@@ -465,6 +467,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    ACTION BUTTONS
    ═══════════════════════════════════════════════════════════ */
+
 .action-btn {
   padding: 0.4em 0.8em;
   margin: 2em 0;
@@ -493,6 +496,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    MODAL OVERLAY
    ═══════════════════════════════════════════════════════════ */
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -570,6 +574,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    FORM
    ═══════════════════════════════════════════════════════════ */
+
 .album-form {
   padding: 1.5em;
 }
@@ -620,6 +625,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    COVER PREVIEW
    ═══════════════════════════════════════════════════════════ */
+
 .cover-preview {
   margin-bottom: 1.2em;
 }
@@ -643,6 +649,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    FORM ACTIONS
    ═══════════════════════════════════════════════════════════ */
+
 .form-actions {
   display: flex;
   justify-content: flex-end;
@@ -685,8 +692,9 @@ export default {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   DELETE CONFIRMATION MODAL
+   DELETE
    ═══════════════════════════════════════════════════════════ */
+
 .delete-confirm {
   text-align: center;
   padding: 2em;
@@ -739,8 +747,9 @@ export default {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   NOTIFICATION
+   NOTIFICATIONS
    ═══════════════════════════════════════════════════════════ */
+
 .notification {
   position: fixed;
   top: 20px;
@@ -779,6 +788,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    ACCESS DENIED
    ═══════════════════════════════════════════════════════════ */
+
 .access-denied {
   min-height: 100vh;
   background: var(--bg-dark);
@@ -812,8 +822,9 @@ export default {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   SCROLLBAR HIDDEN
+   SCROLLBAR
    ═══════════════════════════════════════════════════════════ */
+
 * {
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -826,6 +837,7 @@ export default {
 /* ═══════════════════════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════════════════════ */
+
 @media (max-width: 900px) {
   .admin-page {
     padding: 1.5em 1em;
@@ -877,7 +889,6 @@ export default {
     padding: 1em;
   }
 
-  /* Cacher certaines colonnes sur mobile */
   .admin-table th:nth-child(4),
   .admin-table td:nth-child(4),
   .admin-table th:nth-child(5),
